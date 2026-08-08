@@ -17,16 +17,16 @@ export const Route = createFileRoute("/")({
   }> => (await getHomeFeed()) as any,
   head: () => ({
     meta: [
-      { title: "Atlas & Ember — Travel, fashion, food, technology & culture" },
+      { title: "Bloomwik— Travel, fashion, food, technology & culture" },
       {
         name: "description",
         content:
           "An editorial multilingual blog covering travel, fashion, food, technology and culture. Translated into 15 languages.",
       },
-      { property: "og:title", content: "Atlas & Ember" },
+      { property: "og:title", content: "Bloomwik— Travel, fashion, food, technology & culture" },
       {
         property: "og:description",
-        content: "Stories from every corner of the world, translated into 15 languages.",
+        content: "An editorial multilingual blog covering travel, fashion, food, technology and culture. Translated into 15 languages.",
       },
       { property: "og:url", content: "/" },
     ],
