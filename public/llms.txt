@@ -1,0 +1,32 @@
+# Atlas & Ember
+
+> An editorial multilingual blog covering travel, fashion, food, technology and culture. Stories are written in English and translated into 15 languages on demand.
+
+Atlas & Ember publishes long-form editorial articles for curious readers worldwide. Every article carries a clear category, author, publication date, and the country/region it is set in. The site supports 15 interface languages with hreflang tags and an AI-powered article translator.
+
+## Pages
+
+- [Home](/): featured story, latest stories, and per-category strips
+- [About](/about): masthead and editorial mission
+- [Contact](/contact): pitches, partnerships, press
+
+## Categories
+
+- [Travel](/category/travel): field notes from the road, the rail and the runway
+- [Fashion](/category/fashion): style as language — read between the seams
+- [Food](/category/food): recipes, restaurants and rituals around the table
+- [Technology](/category/technology): tools, ideas and the people building tomorrow
+- [Culture](/category/culture): art, music, books and the conversation around them
+
+## Featured stories
+
+- [Fjords at first light](/article/fjords-at-first-light): a slow week along Norway's western coast
+- [The quiet revival of tailoring](/article/the-quiet-revival-of-tailoring)
+- [A tomato is a promise](/article/a-tomato-is-a-promise): cooking with the season
+- [The end of the everything app](/article/the-end-of-the-everything-app)
+- [Marrakech after dark](/article/marrakech-after-dark): a night-walker's guide to the medina
+- [What museums keep getting wrong](/article/what-museums-keep-getting-wrong) about young visitors
+
+## Optional
+
+- [Sitemap](/sitemap.xml)

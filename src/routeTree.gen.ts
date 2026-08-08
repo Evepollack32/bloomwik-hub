@@ -10,33 +10,335 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IndexnowKeyDottxtRouteImport } from './routes/$indexnowKey[.]txt'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ArticleSlugRouteImport } from './routes/article.$slug'
+import { Route as CategorySlugRouteImport } from './routes/category.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin/ads'
+import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin/analytics'
+import { Route as AuthenticatedAdminArticlesRouteImport } from './routes/_authenticated/admin/articles'
+import { Route as AuthenticatedAdminAuthorsRouteImport } from './routes/_authenticated/admin/authors'
+import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin/categories'
+import { Route as AuthenticatedAdminCommentsRouteImport } from './routes/_authenticated/admin/comments'
+import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin/messages'
+import { Route as AuthenticatedAdminNewsletterRouteImport } from './routes/_authenticated/admin/newsletter'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin/users'
+import { Route as AuthenticatedAdminArticlesIndexRouteImport } from './routes/_authenticated/admin/articles.index'
+import { Route as AuthenticatedAdminArticlesIdRouteImport } from './routes/_authenticated/admin/articles.$id'
+import { Route as AuthenticatedAdminArticlesNewRouteImport } from './routes/_authenticated/admin/articles.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndexnowKeyDottxtRoute = IndexnowKeyDottxtRouteImport.update({
+  id: '/$indexnowKey.txt',
+  path: '/$indexnowKey.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ArticleSlugRoute = ArticleSlugRouteImport.update({
+  id: '/article/$slug',
+  path: '/article/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategorySlugRoute = CategorySlugRouteImport.update({
+  id: '/category/$slug',
+  path: '/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAdsRoute = AuthenticatedAdminAdsRouteImport.update({
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAnalyticsRoute =
+  AuthenticatedAdminAnalyticsRouteImport.update({
+    id: '/analytics',
+    path: '/analytics',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminArticlesRoute =
+  AuthenticatedAdminArticlesRouteImport.update({
+    id: '/articles',
+    path: '/articles',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAuthorsRoute =
+  AuthenticatedAdminAuthorsRouteImport.update({
+    id: '/authors',
+    path: '/authors',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCategoriesRoute =
+  AuthenticatedAdminCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCommentsRoute =
+  AuthenticatedAdminCommentsRouteImport.update({
+    id: '/comments',
+    path: '/comments',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMessagesRoute =
+  AuthenticatedAdminMessagesRouteImport.update({
+    id: '/messages',
+    path: '/messages',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNewsletterRoute =
+  AuthenticatedAdminNewsletterRouteImport.update({
+    id: '/newsletter',
+    path: '/newsletter',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminArticlesIndexRoute =
+  AuthenticatedAdminArticlesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdminArticlesRoute,
+  } as any)
+const AuthenticatedAdminArticlesIdRoute =
+  AuthenticatedAdminArticlesIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAdminArticlesRoute,
+  } as any)
+const AuthenticatedAdminArticlesNewRoute =
+  AuthenticatedAdminArticlesNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedAdminArticlesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/article/$slug': typeof ArticleSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/admin/ads': typeof AuthenticatedAdminAdsRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRouteWithChildren
+  '/admin/authors': typeof AuthenticatedAdminAuthorsRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/comments': typeof AuthenticatedAdminCommentsRoute
+  '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/articles/$id': typeof AuthenticatedAdminArticlesIdRoute
+  '/admin/articles/new': typeof AuthenticatedAdminArticlesNewRoute
+  '/admin/articles/': typeof AuthenticatedAdminArticlesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/article/$slug': typeof ArticleSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/admin/ads': typeof AuthenticatedAdminAdsRoute
+  '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/authors': typeof AuthenticatedAdminAuthorsRoute
+  '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/comments': typeof AuthenticatedAdminCommentsRoute
+  '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/articles/$id': typeof AuthenticatedAdminArticlesIdRoute
+  '/admin/articles/new': typeof AuthenticatedAdminArticlesNewRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/article/$slug': typeof ArticleSlugRoute
+  '/category/$slug': typeof CategorySlugRoute
+  '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
+  '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/articles': typeof AuthenticatedAdminArticlesRouteWithChildren
+  '/_authenticated/admin/authors': typeof AuthenticatedAdminAuthorsRoute
+  '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/_authenticated/admin/comments': typeof AuthenticatedAdminCommentsRoute
+  '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/newsletter': typeof AuthenticatedAdminNewsletterRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/articles/$id': typeof AuthenticatedAdminArticlesIdRoute
+  '/_authenticated/admin/articles/new': typeof AuthenticatedAdminArticlesNewRoute
+  '/_authenticated/admin/articles/': typeof AuthenticatedAdminArticlesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/$indexnowKey.txt'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/sitemap.xml'
+    | '/admin'
+    | '/article/$slug'
+    | '/category/$slug'
+    | '/admin/ads'
+    | '/admin/analytics'
+    | '/admin/articles'
+    | '/admin/authors'
+    | '/admin/categories'
+    | '/admin/comments'
+    | '/admin/messages'
+    | '/admin/newsletter'
+    | '/admin/seo'
+    | '/admin/settings'
+    | '/admin/users'
+    | '/admin/'
+    | '/admin/articles/$id'
+    | '/admin/articles/new'
+    | '/admin/articles/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/$indexnowKey.txt'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/sitemap.xml'
+    | '/article/$slug'
+    | '/category/$slug'
+    | '/admin/ads'
+    | '/admin/analytics'
+    | '/admin/authors'
+    | '/admin/categories'
+    | '/admin/comments'
+    | '/admin/messages'
+    | '/admin/newsletter'
+    | '/admin/seo'
+    | '/admin/settings'
+    | '/admin/users'
+    | '/admin'
+    | '/admin/articles/$id'
+    | '/admin/articles/new'
+    | '/admin/articles'
+  id:
+    | '__root__'
+    | '/'
+    | '/$indexnowKey.txt'
+    | '/_authenticated'
+    | '/about'
+    | '/contact'
+    | '/login'
+    | '/sitemap.xml'
+    | '/_authenticated/admin'
+    | '/article/$slug'
+    | '/category/$slug'
+    | '/_authenticated/admin/ads'
+    | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/articles'
+    | '/_authenticated/admin/authors'
+    | '/_authenticated/admin/categories'
+    | '/_authenticated/admin/comments'
+    | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/newsletter'
+    | '/_authenticated/admin/seo'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/users'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/articles/$id'
+    | '/_authenticated/admin/articles/new'
+    | '/_authenticated/admin/articles/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IndexnowKeyDottxtRoute: typeof IndexnowKeyDottxtRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  LoginRoute: typeof LoginRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ArticleSlugRoute: typeof ArticleSlugRoute
+  CategorySlugRoute: typeof CategorySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +350,251 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$indexnowKey.txt': {
+      id: '/$indexnowKey.txt'
+      path: '/$indexnowKey.txt'
+      fullPath: '/$indexnowKey.txt'
+      preLoaderRoute: typeof IndexnowKeyDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/article/$slug': {
+      id: '/article/$slug'
+      path: '/article/$slug'
+      fullPath: '/article/$slug'
+      preLoaderRoute: typeof ArticleSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/category/$slug': {
+      id: '/category/$slug'
+      path: '/category/$slug'
+      fullPath: '/category/$slug'
+      preLoaderRoute: typeof CategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ads': {
+      id: '/_authenticated/admin/ads'
+      path: '/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AuthenticatedAdminAdsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/analytics': {
+      id: '/_authenticated/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/articles': {
+      id: '/_authenticated/admin/articles'
+      path: '/articles'
+      fullPath: '/admin/articles'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/authors': {
+      id: '/_authenticated/admin/authors'
+      path: '/authors'
+      fullPath: '/admin/authors'
+      preLoaderRoute: typeof AuthenticatedAdminAuthorsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/categories': {
+      id: '/_authenticated/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AuthenticatedAdminCategoriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/comments': {
+      id: '/_authenticated/admin/comments'
+      path: '/comments'
+      fullPath: '/admin/comments'
+      preLoaderRoute: typeof AuthenticatedAdminCommentsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/messages': {
+      id: '/_authenticated/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AuthenticatedAdminMessagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/newsletter': {
+      id: '/_authenticated/admin/newsletter'
+      path: '/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AuthenticatedAdminNewsletterRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/articles/': {
+      id: '/_authenticated/admin/articles/'
+      path: '/'
+      fullPath: '/admin/articles/'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminArticlesRoute
+    }
+    '/_authenticated/admin/articles/$id': {
+      id: '/_authenticated/admin/articles/$id'
+      path: '/$id'
+      fullPath: '/admin/articles/$id'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesIdRouteImport
+      parentRoute: typeof AuthenticatedAdminArticlesRoute
+    }
+    '/_authenticated/admin/articles/new': {
+      id: '/_authenticated/admin/articles/new'
+      path: '/new'
+      fullPath: '/admin/articles/new'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesNewRouteImport
+      parentRoute: typeof AuthenticatedAdminArticlesRoute
+    }
   }
 }
 
+interface AuthenticatedAdminArticlesRouteChildren {
+  AuthenticatedAdminArticlesIdRoute: typeof AuthenticatedAdminArticlesIdRoute
+  AuthenticatedAdminArticlesNewRoute: typeof AuthenticatedAdminArticlesNewRoute
+  AuthenticatedAdminArticlesIndexRoute: typeof AuthenticatedAdminArticlesIndexRoute
+}
+
+const AuthenticatedAdminArticlesRouteChildren: AuthenticatedAdminArticlesRouteChildren =
+  {
+    AuthenticatedAdminArticlesIdRoute: AuthenticatedAdminArticlesIdRoute,
+    AuthenticatedAdminArticlesNewRoute: AuthenticatedAdminArticlesNewRoute,
+    AuthenticatedAdminArticlesIndexRoute: AuthenticatedAdminArticlesIndexRoute,
+  }
+
+const AuthenticatedAdminArticlesRouteWithChildren =
+  AuthenticatedAdminArticlesRoute._addFileChildren(
+    AuthenticatedAdminArticlesRouteChildren,
+  )
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAdsRoute: typeof AuthenticatedAdminAdsRoute
+  AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminArticlesRoute: typeof AuthenticatedAdminArticlesRouteWithChildren
+  AuthenticatedAdminAuthorsRoute: typeof AuthenticatedAdminAuthorsRoute
+  AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
+  AuthenticatedAdminCommentsRoute: typeof AuthenticatedAdminCommentsRoute
+  AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminNewsletterRoute: typeof AuthenticatedAdminNewsletterRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAdsRoute: AuthenticatedAdminAdsRoute,
+  AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminArticlesRoute: AuthenticatedAdminArticlesRouteWithChildren,
+  AuthenticatedAdminAuthorsRoute: AuthenticatedAdminAuthorsRoute,
+  AuthenticatedAdminCategoriesRoute: AuthenticatedAdminCategoriesRoute,
+  AuthenticatedAdminCommentsRoute: AuthenticatedAdminCommentsRoute,
+  AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+  AuthenticatedAdminNewsletterRoute: AuthenticatedAdminNewsletterRoute,
+  AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IndexnowKeyDottxtRoute: IndexnowKeyDottxtRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  LoginRoute: LoginRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ArticleSlugRoute: ArticleSlugRoute,
+  CategorySlugRoute: CategorySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

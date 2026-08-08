@@ -1,0 +1,1 @@
+UPDATE public.articles SET image_url = replace(image_url, '/src/assets/', '/images/') WHERE image_url LIKE '/src/assets/%';
