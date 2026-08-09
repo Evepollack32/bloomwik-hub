@@ -4,17 +4,22 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
 import { useLocale } from "@/lib/locale-context";
 import { hreflangLinks } from "@/lib/seo";
+import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
 import { getHomeFeed, type ArticleDTO, type CategoryDTO } from "@/lib/blog.functions";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/")({
-  loader: async (): Promise<{
+  validateSearch: (s: Record<string, unknown>) => ({
+    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
+  }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
+  loader: async ({ deps }): Promise<{
     categories: CategoryDTO[];
     articles: ArticleDTO[];
     featured: ArticleDTO | null;
     secondaryFeatured: ArticleDTO[];
     popular: ArticleDTO[];
-  }> => (await getHomeFeed()) as any,
+  }> => (await getHomeFeed({ data: { locale: deps.lang ?? "en-US" } })) as any,
   head: () => ({
     meta: [
       { title: "Bloomwik— Travel, fashion, food, technology & culture" },

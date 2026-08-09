@@ -2,11 +2,16 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
 import { hreflangLinks } from "@/lib/seo";
+import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
 import { getCategoryFeed, type ArticleDTO, type CategoryDTO } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/category/$slug")({
-  loader: async ({ params }): Promise<{ category: CategoryDTO; articles: ArticleDTO[] }> => {
-    const res = (await getCategoryFeed({ data: { slug: params.slug } })) as any;
+  validateSearch: (s: Record<string, unknown>) => ({
+    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
+  }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
+  loader: async ({ params, deps }): Promise<{ category: CategoryDTO; articles: ArticleDTO[] }> => {
+    const res = (await getCategoryFeed({ data: { slug: params.slug, locale: deps.lang ?? "en-US" } })) as any;
     if (!res.category) throw notFound();
     return res;
   },

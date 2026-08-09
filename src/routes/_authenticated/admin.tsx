@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { LayoutDashboard, FileText, FolderOpen, Megaphone, LogOut, ExternalLink, Users, MessageSquare, Mail, Inbox, BarChart3, Search, Settings, PenLine } from "lucide-react";
+import { LayoutDashboard, FileText, FolderOpen, Megaphone, LogOut, ExternalLink, Users, MessageSquare, Mail, Inbox, BarChart3, Search, Settings, PenLine, Tag } from "lucide-react";
 import { checkIsAdmin } from "@/lib/blog.functions";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -35,13 +35,14 @@ function AdminLayout() {
     { to: "/admin/comments", label: "Comments", icon: MessageSquare },
     { to: "/admin/newsletter", label: "Newsletter", icon: Mail },
     { to: "/admin/messages", label: "Messages", icon: Inbox },
+    { to: "/admin/offers", label: "Offers", icon: Tag },
     { to: "/admin/ads", label: "Ads", icon: Megaphone },
     { to: "/admin/users", label: "Users", icon: Users },
     { to: "/admin/settings", label: "Settings", icon: Settings },
   ];
 
   return (
-    <div className="container-x grid gap-8 py-10 lg:grid-cols-[220px_1fr]">
+    <div className="mx-auto grid w-[95%] max-w-none gap-8 py-10 lg:grid-cols-[220px_1fr]">
       <aside className="space-y-1 lg:sticky lg:top-20 lg:self-start">
         <p className="mb-3 px-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">Admin</p>
         {items.map((it) => {

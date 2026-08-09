@@ -146,8 +146,8 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[20px] border border-border bg-card">
-      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-muted/30 px-2 py-1.5">
+    <div className="rounded-[20px] border border-border bg-card">
+      <div className="sticky top-0 z-30 flex flex-wrap items-center gap-1 rounded-t-[20px] border-b border-border bg-muted px-2 py-1.5 backdrop-blur supports-[backdrop-filter]:bg-muted/95">
         <Btn on={() => editor.chain().focus().toggleBold().run()} active={editor.isActive("bold")} title="Bold"><Bold className="h-4 w-4" /></Btn>
         <Btn on={() => editor.chain().focus().toggleItalic().run()} active={editor.isActive("italic")} title="Italic"><Italic className="h-4 w-4" /></Btn>
         <Btn on={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive("underline")} title="Underline"><UnderlineIcon className="h-4 w-4" /></Btn>
