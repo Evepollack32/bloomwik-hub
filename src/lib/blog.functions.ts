@@ -1031,3 +1031,119 @@ export const adminStats = createServerFn({ method: "GET" })
       avgScore,
     };
   });
+
+// =================== OFFERS (sponsored, per locale) ===================
+
+export interface OfferDTO {
+  id: string;
+  locale: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  link_url: string;
+  cta_label: string;
+  badge: string | null;
+  price: string | null;
+  category_id: string | null;
+  active: boolean;
+  weight: number;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+function mapOffer(row: any): OfferDTO {
+  return {
+    id: row.id,
+    locale: row.locale ?? "en-US",
+    title: row.title,
+    description: row.description ?? null,
+    image_url: row.image_url ?? null,
+    link_url: row.link_url,
+    cta_label: row.cta_label ?? "View offer",
+    badge: row.badge ?? null,
+    price: row.price ?? null,
+    category_id: row.category_id ?? null,
+    active: row.active ?? true,
+    weight: row.weight ?? 1,
+    sort_order: row.sort_order ?? 0,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
+}
+
+export const listOffers = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) =>
+    z.object({ locale: z.string().max(10).default("en-US") }).parse(d ?? {}),
+  )
+  .handler(async ({ data }) => {
+    const { data: rows, error } = await supabaseAdmin
+      .from("offers")
+      .select("*")
+      .eq("active", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    const all = (rows ?? []).map(mapOffer);
+    const exact = all.filter((o) => o.locale === data.locale);
+    return exact.length ? exact : all.filter((o) => baseLang(o.locale) === baseLang(data.locale));
+  });
+
+export const adminListOffers = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("offers")
+      .select("*")
+      .order("locale", { ascending: true })
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (data ?? []).map(mapOffer);
+  });
+
+const offerInputSchema = z.object({
+  id: z.string().uuid().optional(),
+  locale: z.string().min(2).max(10),
+  title: z.string().min(1).max(200),
+  description: z.string().max(600).nullable().optional(),
+  image_url: z.string().max(2000).nullable().optional(),
+  link_url: z.string().min(1).max(2000),
+  cta_label: z.string().min(1).max(60).default("View offer"),
+  badge: z.string().max(40).nullable().optional(),
+  price: z.string().max(40).nullable().optional(),
+  category_id: z.string().uuid().nullable().optional(),
+  active: z.boolean().default(true),
+  weight: z.number().int().min(1).max(100).default(1),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+});
+
+export const adminUpsertOffer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => offerInputSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const payload: Record<string, unknown> = { ...data };
+    if (data.id) {
+      const { error } = await supabaseAdmin.from("offers").update(payload as never).eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { id: data.id };
+    }
+    delete payload.id;
+    const { data: row, error } = await supabaseAdmin
+      .from("offers")
+      .insert(payload as never)
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: row.id };
+  });
+
+export const adminDeleteOffer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const { error } = await supabaseAdmin.from("offers").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
