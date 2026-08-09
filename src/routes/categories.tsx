@@ -36,7 +36,7 @@ export const Route = createFileRoute("/categories")({
 });
 
 function CategoriesPage() {
-  const categories = Route.useLoaderData();
+  const categories = Route.useLoaderData() as CategoryDTO[];
   const { t } = useLocale();
 
   return (
