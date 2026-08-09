@@ -50,8 +50,14 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link to="/categories" className="font-semibold text-ruby transition hover:text-champagne">
+                {t("all_categories")} →
+              </Link>
+            </li>
           </ul>
         </div>
+
 
         <div>
           <h3 className="text-xs uppercase tracking-[0.2em] text-champagne/60">{t("brand")}</h3>
