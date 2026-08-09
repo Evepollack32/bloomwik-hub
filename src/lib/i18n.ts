@@ -1,29 +1,45 @@
-// 15-language UI dictionary. US English is the default.
-// Article body translation is handled at runtime via the AI server function.
+// Multi-locale UI dictionary. US English is the default.
+// Each locale can host natively-written articles as well as translations.
 
 export type LocaleCode =
-  | "en-US" | "en-GB" | "es" | "fr" | "de" | "it" | "pt-BR"
-  | "ja" | "zh" | "ko" | "ar" | "hi" | "ru" | "tr" | "nl";
+  | "en-US" | "en-GB" | "en-IE" | "en-AU" | "en-SG" | "en-PH"
+  | "es" | "es-CO" | "fr" | "de" | "de-CH" | "it"
+  | "pt-BR" | "pt-PT" | "nl" | "nl-BE"
+  | "sv-SE" | "nb-NO" | "fi-FI" | "ja" | "ko" | "ru";
 
 export const LOCALES: { code: LocaleCode; label: string; native: string; flag: string; rtl?: boolean; region?: string }[] = [
-  { code: "en-US", label: "English (US)", native: "English (US)", flag: "🇺🇸", region: "US" },
-  { code: "en-GB", label: "English (UK)", native: "English (UK)", flag: "🇬🇧", region: "GB" },
-  { code: "es",    label: "Spanish",      native: "Español",       flag: "🇪🇸", region: "ES" },
-  { code: "fr",    label: "French",       native: "Français",      flag: "🇫🇷", region: "FR" },
-  { code: "de",    label: "German",       native: "Deutsch",       flag: "🇩🇪", region: "DE" },
-  { code: "it",    label: "Italian",      native: "Italiano",      flag: "🇮🇹", region: "IT" },
-  { code: "pt-BR", label: "Portuguese (BR)", native: "Português (BR)", flag: "🇧🇷", region: "BR" },
-  { code: "ja",    label: "Japanese",     native: "日本語",          flag: "🇯🇵", region: "JP" },
-  { code: "zh",    label: "Chinese",      native: "中文",            flag: "🇨🇳", region: "CN" },
-  { code: "ko",    label: "Korean",       native: "한국어",          flag: "🇰🇷", region: "KR" },
-  { code: "ar",    label: "Arabic",       native: "العربية",         flag: "🇸🇦", region: "SA", rtl: true },
-  { code: "hi",    label: "Hindi",        native: "हिन्दी",          flag: "🇮🇳", region: "IN" },
-  { code: "ru",    label: "Russian",      native: "Русский",        flag: "🇷🇺", region: "RU" },
-  { code: "tr",    label: "Turkish",      native: "Türkçe",         flag: "🇹🇷", region: "TR" },
-  { code: "nl",    label: "Dutch",        native: "Nederlands",     flag: "🇳🇱", region: "NL" },
+  { code: "en-US", label: "United States",  native: "English (US)",    flag: "🇺🇸", region: "US" },
+  { code: "en-GB", label: "United Kingdom", native: "English (UK)",    flag: "🇬🇧", region: "GB" },
+  { code: "en-IE", label: "Ireland",        native: "English (IE)",    flag: "🇮🇪", region: "IE" },
+  { code: "en-AU", label: "Australia",      native: "English (AU)",    flag: "🇦🇺", region: "AU" },
+  { code: "en-SG", label: "Singapore",      native: "English (SG)",    flag: "🇸🇬", region: "SG" },
+  { code: "en-PH", label: "Philippines",    native: "English (PH)",    flag: "🇵🇭", region: "PH" },
+  { code: "es",    label: "Spain",          native: "Español",         flag: "🇪🇸", region: "ES" },
+  { code: "es-CO", label: "Colombia",       native: "Español (CO)",    flag: "🇨🇴", region: "CO" },
+  { code: "fr",    label: "France",         native: "Français",        flag: "🇫🇷", region: "FR" },
+  { code: "de",    label: "Germany",        native: "Deutsch",         flag: "🇩🇪", region: "DE" },
+  { code: "de-CH", label: "Switzerland",    native: "Deutsch (CH)",    flag: "🇨🇭", region: "CH" },
+  { code: "it",    label: "Italy",          native: "Italiano",        flag: "🇮🇹", region: "IT" },
+  { code: "pt-BR", label: "Brazil",         native: "Português (BR)",  flag: "🇧🇷", region: "BR" },
+  { code: "pt-PT", label: "Portugal",       native: "Português (PT)",  flag: "🇵🇹", region: "PT" },
+  { code: "nl",    label: "Netherlands",    native: "Nederlands",      flag: "🇳🇱", region: "NL" },
+  { code: "nl-BE", label: "Belgium",        native: "Nederlands (BE)", flag: "🇧🇪", region: "BE" },
+  { code: "sv-SE", label: "Sweden",         native: "Svenska",         flag: "🇸🇪", region: "SE" },
+  { code: "nb-NO", label: "Norway",         native: "Norsk",           flag: "🇳🇴", region: "NO" },
+  { code: "fi-FI", label: "Finland",        native: "Suomi",           flag: "🇫🇮", region: "FI" },
+  { code: "ja",    label: "Japan",          native: "日本語",           flag: "🇯🇵", region: "JP" },
+  { code: "ko",    label: "South Korea",    native: "한국어",           flag: "🇰🇷", region: "KR" },
+  { code: "ru",    label: "Russia",         native: "Русский",         flag: "🇷🇺", region: "RU" },
 ];
 
+export const LOCALE_CODES = LOCALES.map((l) => l.code) as LocaleCode[];
+
+export function isLocaleCode(v: unknown): v is LocaleCode {
+  return typeof v === "string" && (LOCALE_CODES as string[]).includes(v);
+}
+
 export const DEFAULT_LOCALE: LocaleCode = "en-US";
+
 
 type Dict = Record<string, string>;
 
