@@ -37,7 +37,6 @@ export const Route = createFileRoute("/sitemap.xml")({
         const data = (await getSitemapData()) as {
           articles: { slug: string; locale: string; updated_at: string | null; alternates: Alt[] }[];
           categories: { slug: string; updated_at: string | null }[];
-          authors: { slug: string; updated_at: string | null }[];
         };
 
         const blocks: string[] = [];
@@ -101,16 +100,6 @@ export const Route = createFileRoute("/sitemap.xml")({
               }),
             );
           }
-        }
-
-        for (const au of data.authors) {
-          blocks.push(
-            urlBlock(`${BASE_URL}/author/${au.slug}`, {
-              lastmod: au.updated_at,
-              changefreq: "monthly",
-              priority: "0.5",
-            }),
-          );
         }
 
         const xml = [
