@@ -12,12 +12,18 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { useLocale } from "@/lib/locale-context";
 import { hreflangLinks, geoMeta } from "@/lib/seo";
 import { translateArticle } from "@/lib/translate.functions";
-import { getArticleBySlug, type ArticleDTO } from "@/lib/blog.functions";
+import { getArticleBySlug, type ArticleDTO, type OfferDTO } from "@/lib/blog.functions";
+import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { OfferRail } from "@/components/OfferRail";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/article/$slug")({
-  loader: async ({ params }): Promise<{ article: ArticleDTO; related: ArticleDTO[] }> => {
-    const res = (await getArticleBySlug({ data: { slug: params.slug } })) as any;
+  validateSearch: (s: Record<string, unknown>) => ({
+    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
+  }),
+  loaderDeps: ({ search: { lang } }) => ({ lang }),
+  loader: async ({ params, deps }): Promise<{ article: ArticleDTO; related: ArticleDTO[]; offers: OfferDTO[] }> => {
+    const res = (await getArticleBySlug({ data: { slug: params.slug, locale: deps.lang ?? "en-US" } })) as any;
     if (!res.article) throw notFound();
     return res;
   },
@@ -58,7 +64,15 @@ export const Route = createFileRoute("/article/$slug")({
         { name: "twitter:image", content: twImg },
         ...geoMeta({ country: a.geo_country ?? "", region: a.geo_region ?? undefined, city: a.geo_city ?? undefined }),
       ],
-      links: [{ rel: "canonical", href: canonical }, ...hreflangLinks(path)],
+      links: [
+        { rel: "canonical", href: canonical },
+        ...(a.alternates ?? []).map((alt) => ({
+          rel: "alternate",
+          hrefLang: alt.locale,
+          href: alt.locale === a.locale ? `/article/${alt.slug}` : `/article/${alt.slug}?lang=${alt.locale}`,
+        })),
+        { rel: "alternate", hrefLang: "x-default", href: path },
+      ],
       scripts: [{
         type: "application/ld+json",
         children: JSON.stringify({
@@ -97,7 +111,7 @@ export const Route = createFileRoute("/article/$slug")({
 });
 
 function ArticlePage() {
-  const { article, related } = Route.useLoaderData() as { article: ArticleDTO; related: ArticleDTO[] };
+  const { article, related, offers } = Route.useLoaderData() as { article: ArticleDTO; related: ArticleDTO[]; offers: OfferDTO[] };
   const { t, locale } = useLocale();
 
   const [body, setBody] = useState<string[]>(article.body);
@@ -199,6 +213,7 @@ function ArticlePage() {
               </ul>
             </div>
           )}
+          <OfferRail offers={offers} />
         </aside>
       </article>
 

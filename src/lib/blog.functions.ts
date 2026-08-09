@@ -46,6 +46,8 @@ export interface AuthorDTO {
 
 export interface ArticleDTO {
   id: string;
+  /** Locale the article was natively written in. */
+  locale: string;
   slug: string;
   title: string;
   excerpt: string;
@@ -88,12 +90,24 @@ export interface ArticleDTO {
   seo_keywords: string | null;
   created_at: string;
   updated_at: string;
+  /** Set when the row was rendered from a translation of another locale. */
+  translated_from?: string | null;
+  /** Every locale this story is available in, with its localized slug. */
+  alternates?: { locale: string; slug: string }[];
 }
 
 export interface TranslationDTO {
   id: string;
   article_id: string;
   locale: string;
+  slug: string | null;
+  tags: string[];
+  image_url: string | null;
+  image_alt: string | null;
+  og_image: string | null;
+  twitter_image: string | null;
+  reading_minutes: number | null;
+  noindex: boolean;
   title: string | null;
   excerpt: string | null;
   body: string[];
@@ -126,6 +140,7 @@ export interface AdDTO {
 function mapArticle(row: any): ArticleDTO {
   return {
     id: row.id,
+    locale: row.locale ?? "en-US",
     slug: row.slug,
     title: row.title,
     excerpt: row.excerpt ?? "",
@@ -176,6 +191,14 @@ function mapTranslation(row: any): TranslationDTO {
     id: row.id,
     article_id: row.article_id,
     locale: row.locale,
+    slug: row.slug ?? null,
+    tags: row.tags ?? [],
+    image_url: row.image_url ?? null,
+    image_alt: row.image_alt ?? null,
+    og_image: row.og_image ?? null,
+    twitter_image: row.twitter_image ?? null,
+    reading_minutes: row.reading_minutes ?? null,
+    noindex: row.noindex ?? false,
     title: row.title,
     excerpt: row.excerpt,
     body: row.body ?? [],
@@ -195,6 +218,84 @@ function mapTranslation(row: any): TranslationDTO {
   };
 }
 
+
+/** Base language of a locale code: "es-CO" -> "es". */
+function baseLang(locale: string) {
+  return String(locale).split("-")[0];
+}
+
+/** Merge a translation row over its source article so the feed is fully localized. */
+function localize(article: ArticleDTO, tr: TranslationDTO | null | undefined): ArticleDTO {
+  if (!tr) return article;
+  const kw = (tr.keywords ?? []).join(", ");
+  return {
+    ...article,
+    locale: tr.locale,
+    slug: tr.slug || article.slug,
+    title: tr.title || article.title,
+    excerpt: tr.excerpt || article.excerpt,
+    body: tr.body?.length ? tr.body : article.body,
+    content_html: tr.body_html || article.content_html,
+    image_url: tr.image_url || article.image_url,
+    image_alt: tr.image_alt || article.image_alt,
+    reading_minutes: tr.reading_minutes || article.reading_minutes,
+    tags: tr.tags?.length ? tr.tags : article.tags,
+    focus_keyword: tr.focus_keyword || article.focus_keyword,
+    canonical_url: tr.canonical_url || null,
+    og_title: tr.og_title || tr.meta_title || null,
+    og_description: tr.og_description || tr.meta_description || null,
+    og_image: tr.og_image || article.og_image,
+    twitter_title: tr.twitter_title || tr.meta_title || null,
+    twitter_description: tr.twitter_description || tr.meta_description || null,
+    twitter_image: tr.twitter_image || article.twitter_image,
+    seo_title: tr.meta_title || null,
+    seo_description: tr.meta_description || null,
+    seo_keywords: kw || null,
+    noindex: tr.noindex || article.noindex,
+    translated_from: article.locale,
+  };
+}
+
+/**
+ * Locale-aware feed builder.
+ * Shows stories natively written in `locale` plus stories translated into it.
+ * Falls back to the same base language, then to the default locale, so a
+ * newly-added locale never renders an empty site.
+ */
+async function localizedFeed(rows: any[], locale: string) {
+  const articles = rows.map(mapArticle);
+  if (articles.length === 0) return { articles: [] as ArticleDTO[], fallback: false };
+
+  const { data: trs } = await supabaseAdmin
+    .from("article_translations")
+    .select("*")
+    .in("article_id", articles.map((a) => a.id))
+    .eq("status", "published");
+  const translations = (trs ?? []).map(mapTranslation);
+
+  const pick = (match: (v: string) => boolean) => {
+    const out: ArticleDTO[] = [];
+    for (const a of articles) {
+      const tr = translations.find((t) => t.article_id === a.id && match(t.locale));
+      if (tr) out.push(localize(a, tr));
+      else if (match(a.locale)) out.push(a);
+    }
+    return out;
+  };
+
+  let list = pick((v) => v === locale);
+  let fallback = false;
+  if (list.length === 0) {
+    list = pick((v) => baseLang(v) === baseLang(locale));
+    fallback = list.length > 0;
+  }
+  if (list.length === 0) {
+    list = articles;
+    fallback = true;
+  }
+  return { articles: list, fallback };
+}
+
 const ARTICLE_SELECT = "*, categories!inner(slug,name,hex_color), authors(slug,name,avatar_url,bio)";
 
 // =================== READS ===================
@@ -208,17 +309,24 @@ export const listCategories = createServerFn({ method: "GET" }).handler(async ()
   return (data ?? []) as unknown as CategoryDTO[];
 });
 
-export const listPublishedArticles = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await supabaseAdmin
-    .from("articles")
-    .select(ARTICLE_SELECT)
-    .eq("published", true)
-    .order("published_at", { ascending: false });
-  if (error) throw new Error(error.message);
-  return (data ?? []).map(mapArticle);
-});
+const localeInput = z.object({ locale: z.string().max(10).default("en-US") });
 
-export const getHomeFeed = createServerFn({ method: "GET" }).handler(async () => {
+export const listPublishedArticles = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => localeInput.parse(d ?? {}))
+  .handler(async ({ data }) => {
+    const { data: rows, error } = await supabaseAdmin
+      .from("articles")
+      .select(ARTICLE_SELECT)
+      .eq("published", true)
+      .order("published_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    const { articles } = await localizedFeed(rows ?? [], data.locale);
+    return articles;
+  });
+
+export const getHomeFeed = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => localeInput.parse(d ?? {}))
+  .handler(async ({ data: input }) => {
   const [{ data: cats, error: catErr }, { data: arts, error: artErr }] = await Promise.all([
     supabaseAdmin.from("categories").select("*").order("sort_order"),
     supabaseAdmin
@@ -229,7 +337,7 @@ export const getHomeFeed = createServerFn({ method: "GET" }).handler(async () =>
   ]);
   if (catErr) throw new Error(catErr.message);
   if (artErr) throw new Error(artErr.message);
-  const articles = (arts ?? []).map(mapArticle);
+  const { articles, fallback } = await localizedFeed(arts ?? [], input.locale);
   const featured = articles.find((a) => a.featured) ?? articles[0] ?? null;
   const featuredId = featured?.id;
   const rest = articles.filter((a) => a.id !== featuredId);
@@ -241,11 +349,14 @@ export const getHomeFeed = createServerFn({ method: "GET" }).handler(async () =>
     featured,
     secondaryFeatured,
     popular,
+    localeFallback: fallback,
   };
 });
 
 export const getCategoryFeed = createServerFn({ method: "GET" })
-  .inputValidator((d: { slug: string }) => z.object({ slug: z.string().min(1).max(64) }).parse(d))
+  .inputValidator((d: { slug: string; locale?: string }) =>
+    z.object({ slug: z.string().min(1).max(64), locale: z.string().max(10).default("en-US") }).parse(d),
+  )
   .handler(async ({ data }) => {
     const { data: cat, error: catErr } = await supabaseAdmin
       .from("categories")
@@ -261,7 +372,8 @@ export const getCategoryFeed = createServerFn({ method: "GET" })
       .eq("published", true)
       .order("published_at", { ascending: false });
     if (artErr) throw new Error(artErr.message);
-    return { category: cat as unknown as CategoryDTO, articles: (arts ?? []).map(mapArticle) };
+    const { articles } = await localizedFeed(arts ?? [], data.locale);
+    return { category: cat as unknown as CategoryDTO, articles };
   });
 
 export const getAuthorFeed = createServerFn({ method: "GET" })
@@ -295,45 +407,90 @@ export const listAuthors = createServerFn({ method: "GET" }).handler(async () =>
 
 export const getArticleBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string; locale?: string }) =>
-    z.object({ slug: z.string().min(1).max(200), locale: z.string().max(10).optional() }).parse(d)
+    z.object({ slug: z.string().min(1).max(200), locale: z.string().max(10).default("en-US") }).parse(d)
   )
   .handler(async ({ data }) => {
-    const { data: row, error } = await supabaseAdmin
+    const empty = { article: null, related: [] as ArticleDTO[], offers: [] as OfferDTO[] };
+
+    // The slug may belong to the source article or to any localized version.
+    let { data: row } = await supabaseAdmin
       .from("articles")
       .select(ARTICLE_SELECT)
       .eq("slug", data.slug)
       .eq("published", true)
       .maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!row) return { article: null, related: [] as ArticleDTO[], translation: null, locales: [] as string[] };
-    const article = mapArticle(row);
 
-    const [{ data: rel }, { data: trs }] = await Promise.all([
+    let slugTranslation: TranslationDTO | null = null;
+    if (!row) {
+      const { data: tr } = await supabaseAdmin
+        .from("article_translations")
+        .select("*")
+        .eq("slug", data.slug)
+        .eq("status", "published")
+        .maybeSingle();
+      if (!tr) return empty;
+      slugTranslation = mapTranslation(tr);
+      const { data: src } = await supabaseAdmin
+        .from("articles")
+        .select(ARTICLE_SELECT)
+        .eq("id", slugTranslation.article_id)
+        .eq("published", true)
+        .maybeSingle();
+      if (!src) return empty;
+      row = src;
+    }
+
+    const source = mapArticle(row);
+
+    const { data: trs } = await supabaseAdmin
+      .from("article_translations")
+      .select("*")
+      .eq("article_id", source.id)
+      .eq("status", "published");
+    const translations = (trs ?? []).map(mapTranslation);
+
+    // Which language version to render: URL slug wins, then the requested locale.
+    const wanted =
+      slugTranslation ??
+      translations.find((t) => t.locale === data.locale) ??
+      (source.locale === data.locale
+        ? null
+        : translations.find((t) => baseLang(t.locale) === baseLang(data.locale)) ?? null);
+
+    const alternates = [
+      { locale: source.locale, slug: source.slug },
+      ...translations.map((t) => ({ locale: t.locale, slug: t.slug || source.slug })),
+    ];
+
+    const article: ArticleDTO = { ...localize(source, wanted), alternates };
+    const activeLocale = article.locale;
+
+    const [{ data: rel }, { data: offerRows }] = await Promise.all([
       supabaseAdmin
         .from("articles")
         .select(ARTICLE_SELECT)
-        .eq("category_id", article.category_id)
+        .eq("category_id", source.category_id)
         .eq("published", true)
-        .neq("id", article.id)
+        .neq("id", source.id)
         .order("published_at", { ascending: false })
         .limit(3),
       supabaseAdmin
-        .from("article_translations")
+        .from("offers")
         .select("*")
-        .eq("article_id", article.id)
-        .eq("status", "published"),
+        .eq("active", true)
+        .order("sort_order", { ascending: true }),
     ]);
 
-    const translations = (trs ?? []).map(mapTranslation);
-    const wanted = data.locale && !data.locale.startsWith("en") ? data.locale : null;
-    const translation = wanted ? (translations.find((t) => t.locale === wanted) ?? null) : null;
+    const { articles: related } = await localizedFeed(rel ?? [], activeLocale);
 
-    return {
-      article,
-      related: (rel ?? []).map(mapArticle),
-      translation,
-      locales: translations.map((t) => t.locale),
-    };
+    const allOffers = (offerRows ?? []).map(mapOffer);
+    const scoped = allOffers.filter(
+      (o) => !o.category_id || o.category_id === source.category_id,
+    );
+    let offers = scoped.filter((o) => o.locale === activeLocale);
+    if (offers.length === 0) offers = scoped.filter((o) => baseLang(o.locale) === baseLang(activeLocale));
+
+    return { article, related, offers: offers.slice(0, 4) };
   });
 
 export const pickAd = createServerFn({ method: "GET" })
@@ -361,22 +518,45 @@ export const pickAd = createServerFn({ method: "GET" })
 /** Everything sitemap.xml needs, in one round trip. */
 export const getSitemapData = createServerFn({ method: "GET" }).handler(async () => {
   const [{ data: arts }, { data: cats }, { data: auths }, { data: trs }] = await Promise.all([
-    supabaseAdmin.from("articles").select("slug, updated_at, noindex").eq("published", true),
+    supabaseAdmin.from("articles").select("id, slug, locale, updated_at, published_at, noindex").eq("published", true),
     supabaseAdmin.from("categories").select("slug, updated_at, noindex"),
     supabaseAdmin.from("authors").select("slug, updated_at"),
-    supabaseAdmin.from("article_translations").select("locale, articles!inner(slug)").eq("status", "published"),
+    supabaseAdmin
+      .from("article_translations")
+      .select("article_id, locale, slug, updated_at, noindex")
+      .eq("status", "published"),
   ]);
-  const byArticle: Record<string, string[]> = {};
+
+  const byArticle: Record<string, { locale: string; slug: string; updated_at: string | null }[]> = {};
   (trs ?? []).forEach((t: any) => {
-    const s = t.articles?.slug;
-    if (!s) return;
-    (byArticle[s] ??= []).push(t.locale);
+    if (t.noindex) return;
+    (byArticle[t.article_id] ??= []).push({
+      locale: t.locale,
+      slug: t.slug || "",
+      updated_at: t.updated_at ?? null,
+    });
   });
+
+  const articles = (arts ?? [])
+    .filter((a: any) => !a.noindex)
+    .map((a: any) => {
+      const alts = (byArticle[a.id] ?? []).map((t) => ({
+        locale: t.locale,
+        slug: t.slug || a.slug,
+        updated_at: t.updated_at,
+      }));
+      return {
+        slug: a.slug,
+        locale: a.locale ?? "en-US",
+        updated_at: a.updated_at ?? a.published_at ?? null,
+        alternates: [{ locale: a.locale ?? "en-US", slug: a.slug, updated_at: a.updated_at ?? null }, ...alts],
+      };
+    });
+
   return {
-    articles: (arts ?? []).filter((a: any) => !a.noindex),
+    articles,
     categories: (cats ?? []).filter((c: any) => !c.noindex),
     authors: auths ?? [],
-    translations: byArticle,
   };
 });
 
@@ -441,6 +621,19 @@ export const adminLinkTargets = createServerFn({ method: "GET" })
 
 const translationInputSchema = z.object({
   locale: z.string().min(2).max(10),
+  slug: z
+    .string()
+    .max(200)
+    .regex(/^[a-z0-9-]*$/, "lowercase letters, numbers, hyphens")
+    .nullable()
+    .optional(),
+  tags: z.array(z.string().max(60)).max(30).default([]),
+  image_url: z.string().max(2000).nullable().optional(),
+  image_alt: z.string().max(300).nullable().optional(),
+  og_image: z.string().max(2000).nullable().optional(),
+  twitter_image: z.string().max(2000).nullable().optional(),
+  reading_minutes: z.number().int().min(1).max(120).nullable().optional(),
+  noindex: z.boolean().default(false),
   title: z.string().max(300).nullable().optional(),
   excerpt: z.string().max(1200).nullable().optional(),
   body_html: z.string().max(200000).default(""),
@@ -459,6 +652,7 @@ const translationInputSchema = z.object({
 
 const articleInputSchema = z.object({
   id: z.string().uuid().optional(),
+  locale: z.string().min(2).max(10).default("en-US"),
   slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/, "lowercase letters, numbers, hyphens"),
   title: z.string().min(1).max(300),
   excerpt: z.string().max(1200).default(""),
@@ -548,6 +742,14 @@ export const adminUpsertArticle = createServerFn({ method: "POST" })
         {
           article_id: articleId!,
           locale: t.locale,
+          slug: t.slug?.trim() ? t.slug.trim() : null,
+          tags: t.tags ?? [],
+          image_url: t.image_url ?? null,
+          image_alt: t.image_alt ?? null,
+          og_image: t.og_image ?? null,
+          twitter_image: t.twitter_image ?? null,
+          reading_minutes: t.reading_minutes ?? null,
+          noindex: t.noindex ?? false,
           title: t.title ?? null,
           excerpt: t.excerpt ?? null,
           body: htmlToParagraphs(t.body_html),
@@ -828,4 +1030,120 @@ export const adminStats = createServerFn({ method: "GET" })
       translations: translations ?? 0,
       avgScore,
     };
+  });
+
+// =================== OFFERS (sponsored, per locale) ===================
+
+export interface OfferDTO {
+  id: string;
+  locale: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  link_url: string;
+  cta_label: string;
+  badge: string | null;
+  price: string | null;
+  category_id: string | null;
+  active: boolean;
+  weight: number;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+function mapOffer(row: any): OfferDTO {
+  return {
+    id: row.id,
+    locale: row.locale ?? "en-US",
+    title: row.title,
+    description: row.description ?? null,
+    image_url: row.image_url ?? null,
+    link_url: row.link_url,
+    cta_label: row.cta_label ?? "View offer",
+    badge: row.badge ?? null,
+    price: row.price ?? null,
+    category_id: row.category_id ?? null,
+    active: row.active ?? true,
+    weight: row.weight ?? 1,
+    sort_order: row.sort_order ?? 0,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
+}
+
+export const listOffers = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) =>
+    z.object({ locale: z.string().max(10).default("en-US") }).parse(d ?? {}),
+  )
+  .handler(async ({ data }) => {
+    const { data: rows, error } = await supabaseAdmin
+      .from("offers")
+      .select("*")
+      .eq("active", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    const all = (rows ?? []).map(mapOffer);
+    const exact = all.filter((o) => o.locale === data.locale);
+    return exact.length ? exact : all.filter((o) => baseLang(o.locale) === baseLang(data.locale));
+  });
+
+export const adminListOffers = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("offers")
+      .select("*")
+      .order("locale", { ascending: true })
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (data ?? []).map(mapOffer);
+  });
+
+const offerInputSchema = z.object({
+  id: z.string().uuid().optional(),
+  locale: z.string().min(2).max(10),
+  title: z.string().min(1).max(200),
+  description: z.string().max(600).nullable().optional(),
+  image_url: z.string().max(2000).nullable().optional(),
+  link_url: z.string().min(1).max(2000),
+  cta_label: z.string().min(1).max(60).default("View offer"),
+  badge: z.string().max(40).nullable().optional(),
+  price: z.string().max(40).nullable().optional(),
+  category_id: z.string().uuid().nullable().optional(),
+  active: z.boolean().default(true),
+  weight: z.number().int().min(1).max(100).default(1),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+});
+
+export const adminUpsertOffer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => offerInputSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const payload: Record<string, unknown> = { ...data };
+    if (data.id) {
+      const { error } = await supabaseAdmin.from("offers").update(payload as never).eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { id: data.id };
+    }
+    delete payload.id;
+    const { data: row, error } = await supabaseAdmin
+      .from("offers")
+      .insert(payload as never)
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return { id: row.id };
+  });
+
+export const adminDeleteOffer = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const { error } = await supabaseAdmin.from("offers").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

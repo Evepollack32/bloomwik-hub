@@ -1,4 +1,4 @@
-import { Globe, Check } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator,
@@ -13,14 +13,14 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={t("language")}
-        className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition hover:border-amethyst hover:text-amethyst"
+        aria-label={`${t("language")}: ${active.native}`}
+        title={`${active.native} — ${active.label}`}
+        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1.5 text-sm font-medium text-foreground transition hover:border-amethyst hover:text-amethyst"
       >
-        <Globe className="h-4 w-4" />
-        <span className="hidden sm:inline">{active.flag} {active.native}</span>
-        <span className="sm:hidden">{active.flag}</span>
+        <span className="text-lg leading-none">{active.flag}</span>
+        <ChevronDown className="h-3.5 w-3.5 opacity-60" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="max-h-[70vh] w-64 overflow-y-auto rounded-[20px]">
+      <DropdownMenuContent align="end" className="max-h-[70vh] w-72 overflow-y-auto rounded-[20px]">
         <DropdownMenuLabel className="text-xs uppercase tracking-widest text-muted-foreground">
           {t("language")}
         </DropdownMenuLabel>
@@ -32,7 +32,7 @@ export function LanguageSwitcher() {
             className="flex items-center justify-between rounded-[14px] py-2"
           >
             <span className="flex items-center gap-2">
-              <span className="text-base">{l.flag}</span>
+              <span className="text-lg leading-none">{l.flag}</span>
               <span className="font-medium">{l.native}</span>
               <span className="text-xs text-muted-foreground">{l.label}</span>
             </span>

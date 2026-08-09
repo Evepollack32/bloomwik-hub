@@ -63,16 +63,24 @@ export type Database = {
           excerpt: string | null
           focus_keyword: string | null
           id: string
+          image_alt: string | null
+          image_url: string | null
           keywords: string[]
           locale: string
           meta_description: string | null
           meta_title: string | null
+          noindex: boolean
           og_description: string | null
+          og_image: string | null
           og_title: string | null
+          reading_minutes: number | null
+          slug: string | null
           source: string
           status: string
+          tags: string[]
           title: string | null
           twitter_description: string | null
+          twitter_image: string | null
           twitter_title: string | null
           updated_at: string
         }
@@ -85,16 +93,24 @@ export type Database = {
           excerpt?: string | null
           focus_keyword?: string | null
           id?: string
+          image_alt?: string | null
+          image_url?: string | null
           keywords?: string[]
           locale: string
           meta_description?: string | null
           meta_title?: string | null
+          noindex?: boolean
           og_description?: string | null
+          og_image?: string | null
           og_title?: string | null
+          reading_minutes?: number | null
+          slug?: string | null
           source?: string
           status?: string
+          tags?: string[]
           title?: string | null
           twitter_description?: string | null
+          twitter_image?: string | null
           twitter_title?: string | null
           updated_at?: string
         }
@@ -107,16 +123,24 @@ export type Database = {
           excerpt?: string | null
           focus_keyword?: string | null
           id?: string
+          image_alt?: string | null
+          image_url?: string | null
           keywords?: string[]
           locale?: string
           meta_description?: string | null
           meta_title?: string | null
+          noindex?: boolean
           og_description?: string | null
+          og_image?: string | null
           og_title?: string | null
+          reading_minutes?: number | null
+          slug?: string | null
           source?: string
           status?: string
+          tags?: string[]
           title?: string | null
           twitter_description?: string | null
+          twitter_image?: string | null
           twitter_title?: string | null
           updated_at?: string
         }
@@ -150,6 +174,7 @@ export type Database = {
           id: string
           image_alt: string | null
           image_url: string | null
+          locale: string
           noindex: boolean
           og_description: string | null
           og_image: string | null
@@ -189,6 +214,7 @@ export type Database = {
           id?: string
           image_alt?: string | null
           image_url?: string | null
+          locale?: string
           noindex?: boolean
           og_description?: string | null
           og_image?: string | null
@@ -228,6 +254,7 @@ export type Database = {
           id?: string
           image_alt?: string | null
           image_url?: string | null
+          locale?: string
           noindex?: boolean
           og_description?: string | null
           og_image?: string | null
@@ -495,6 +522,68 @@ export type Database = {
           unsubscribed_at?: string | null
         }
         Relationships: []
+      }
+      offers: {
+        Row: {
+          active: boolean
+          badge: string | null
+          category_id: string | null
+          created_at: string
+          cta_label: string
+          description: string | null
+          id: string
+          image_url: string | null
+          link_url: string
+          locale: string
+          price: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          active?: boolean
+          badge?: string | null
+          category_id?: string | null
+          created_at?: string
+          cta_label?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_url: string
+          locale?: string
+          price?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          active?: boolean
+          badge?: string | null
+          category_id?: string | null
+          created_at?: string
+          cta_label?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_url?: string
+          locale?: string
+          price?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       page_views: {
         Row: {
