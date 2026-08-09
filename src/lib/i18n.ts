@@ -50,6 +50,11 @@ const en: Dict = {
   nav_about: "About",
   nav_contact: "Contact",
   nav_categories: "Categories",
+  all_categories: "All categories",
+  all_categories_lead: "Every desk at Atlas & Ember — pick a beat and start reading.",
+  sponsored: "Sponsored",
+  offers_title: "Offers we like",
+
   hero_kicker: "The world, in stories",
   hero_lead: "Travel, fashion, food, technology and culture — written for the curious, translated for everyone.",
   read_story: "Read the story",
