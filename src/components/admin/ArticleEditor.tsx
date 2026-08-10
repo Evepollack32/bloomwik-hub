@@ -12,13 +12,14 @@ import { LOCALES, DEFAULT_LOCALE, type LocaleCode } from "@/lib/i18n";
 import { analyzeContentSeo } from "@/lib/seo-analyzer";
 import { RichTextEditor } from "./RichTextEditor";
 import { SeoScoreCard, SerpPreview } from "./SeoScoreCard";
+import { ArticleOffers } from "./ArticleOffers";
 
 interface Props {
   article?: ArticleDTO | null;
   translations?: TranslationDTO[];
 }
 
-type Panel = "block" | "seo" | "social" | "schema";
+type Panel = "block" | "seo" | "social" | "schema" | "offers";
 
 interface LangDraft {
   title: string;
@@ -259,6 +260,7 @@ export function ArticleEditor({ article, translations = [] }: Props) {
     { id: "seo", label: "SEO" },
     { id: "social", label: "Social" },
     { id: "schema", label: "Schema" },
+    { id: "offers", label: "Offers" },
   ];
 
   return (
@@ -335,6 +337,10 @@ export function ArticleEditor({ article, translations = [] }: Props) {
       {/* ---------- BODY ---------- */}
       <div className="grid flex-1 items-start xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 px-4 py-8 md:px-8">
+          {panel === "offers" && (
+            <ArticleOffers articleId={article?.id ?? null} locale={locale} />
+          )}
+          <div className={panel === "offers" ? "hidden" : undefined}>
           {!isBase && (
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[16px] bg-amethyst/10 px-4 py-3 text-sm text-muted-foreground">
               <span>
@@ -392,6 +398,7 @@ export function ArticleEditor({ article, translations = [] }: Props) {
             onChange={(html) => (isBase ? set("content_html", html) : setLang("body_html", html))}
             placeholder={isBase ? "Start writing your post…" : "Translated article body…"}
           />
+          </div>
         </div>
 
         {/* ---------- RIGHT PANEL ---------- */}

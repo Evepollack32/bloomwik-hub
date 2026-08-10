@@ -526,6 +526,7 @@ export type Database = {
       offers: {
         Row: {
           active: boolean
+          article_id: string | null
           badge: string | null
           category_id: string | null
           created_at: string
@@ -543,6 +544,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          article_id?: string | null
           badge?: string | null
           category_id?: string | null
           created_at?: string
@@ -560,6 +562,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          article_id?: string | null
           badge?: string | null
           category_id?: string | null
           created_at?: string
@@ -576,6 +579,13 @@ export type Database = {
           weight?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "offers_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "offers_category_id_fkey"
             columns: ["category_id"]

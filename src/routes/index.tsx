@@ -176,7 +176,7 @@ function HomePage() {
         {latest.length === 0 ? (
           <p className="py-20 text-center text-muted-foreground">No stories yet.</p>
         ) : (
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {latest.slice(0, 3).map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}
@@ -187,7 +187,7 @@ function HomePage() {
             <div className="my-12">
               <AdSlot variant="billboard" />
             </div>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
               {latest.slice(3, 9).map((a) => (
                 <ArticleCard key={a.id} article={a} />
               ))}
@@ -195,7 +195,7 @@ function HomePage() {
           </>
         )}
         {latest.length > 9 && (
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {latest.slice(9).map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}
@@ -252,7 +252,7 @@ function HomePage() {
       {/* Browse by category — bold colored tiles */}
       <section className="container-x pb-16">
         <h2 className="mb-8 font-serif text-3xl md:text-4xl">{t("nav_categories")}</h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5">
           {categories.map((c) => (
             <Link
               key={c.id}

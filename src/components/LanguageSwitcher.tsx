@@ -15,11 +15,13 @@ export function LanguageSwitcher() {
       <DropdownMenuTrigger
         aria-label={`${t("language")}: ${active.native}`}
         title={`${active.native} — ${active.label}`}
-        className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1.5 text-sm font-medium text-foreground transition hover:border-amethyst hover:text-amethyst"
+        className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition hover:border-amethyst hover:text-amethyst"
       >
         <span className="text-lg leading-none">{active.flag}</span>
+        <span className="hidden sm:inline">{active.native}</span>
         <ChevronDown className="h-3.5 w-3.5 opacity-60" />
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="max-h-[70vh] w-72 overflow-y-auto rounded-[20px]">
         <DropdownMenuLabel className="text-xs uppercase tracking-widest text-muted-foreground">
           {t("language")}

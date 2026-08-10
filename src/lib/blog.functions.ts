@@ -484,11 +484,15 @@ export const getArticleBySlug = createServerFn({ method: "GET" })
     const { articles: related } = await localizedFeed(rel ?? [], activeLocale);
 
     const allOffers = (offerRows ?? []).map(mapOffer);
-    const scoped = allOffers.filter(
-      (o) => !o.category_id || o.category_id === source.category_id,
+    // Offers attached to this article win; otherwise fall back to site-wide
+    // offers that are either global or scoped to this article's category.
+    const forArticle = allOffers.filter((o) => o.article_id === source.id);
+    const generic = allOffers.filter(
+      (o) => !o.article_id && (!o.category_id || o.category_id === source.category_id),
     );
-    let offers = scoped.filter((o) => o.locale === activeLocale);
-    if (offers.length === 0) offers = scoped.filter((o) => baseLang(o.locale) === baseLang(activeLocale));
+    const pool = forArticle.length ? forArticle : generic;
+    let offers = pool.filter((o) => o.locale === activeLocale);
+    if (offers.length === 0) offers = pool.filter((o) => baseLang(o.locale) === baseLang(activeLocale));
 
     return { article, related, offers: offers.slice(0, 4) };
   });
@@ -1036,6 +1040,7 @@ export const adminStats = createServerFn({ method: "GET" })
 
 export interface OfferDTO {
   id: string;
+  article_id: string | null;
   locale: string;
   title: string;
   description: string | null;
@@ -1055,6 +1060,7 @@ export interface OfferDTO {
 function mapOffer(row: any): OfferDTO {
   return {
     id: row.id,
+    article_id: row.article_id ?? null,
     locale: row.locale ?? "en-US",
     title: row.title,
     description: row.description ?? null,
@@ -1101,8 +1107,24 @@ export const adminListOffers = createServerFn({ method: "GET" })
     return (data ?? []).map(mapOffer);
   });
 
+export const adminListArticleOffers = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ article_id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await ensureAdmin(context.supabase, context.userId);
+    const { data: rows, error } = await supabaseAdmin
+      .from("offers")
+      .select("*")
+      .eq("article_id", data.article_id)
+      .order("locale", { ascending: true })
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map(mapOffer);
+  });
+
 const offerInputSchema = z.object({
   id: z.string().uuid().optional(),
+  article_id: z.string().uuid().nullable().optional(),
   locale: z.string().min(2).max(10),
   title: z.string().min(1).max(200),
   description: z.string().max(600).nullable().optional(),
