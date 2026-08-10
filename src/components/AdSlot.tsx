@@ -25,23 +25,9 @@ export function AdSlot({ variant = "leaderboard", className = "", id }: Props) {
     staleTime: 60_000,
   });
 
-  const placeholderClass =
-    "ad-slot flex items-center justify-center text-xs uppercase tracking-[0.25em] text-muted-foreground";
+  // No ad configured for this slot — render nothing at all.
+  if (!ad) return null;
 
-  // No ad configured — render a clearly labelled placeholder.
-  if (!ad) {
-    return (
-      <aside
-        id={id}
-        role="complementary"
-        aria-label={t("ad_label")}
-        data-ad-slot={variant}
-        className={`${placeholderClass} w-full ${dims[variant]} ${className}`}
-      >
-        {t("ad_label")}
-      </aside>
-    );
-  }
 
   const inner = ad.html_snippet ? (
     <div
