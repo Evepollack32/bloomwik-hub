@@ -337,6 +337,10 @@ export function ArticleEditor({ article, translations = [] }: Props) {
       {/* ---------- BODY ---------- */}
       <div className="grid flex-1 items-start xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 px-4 py-8 md:px-8">
+          {panel === "offers" && (
+            <ArticleOffers articleId={article?.id ?? null} locale={locale} />
+          )}
+          <div className={panel === "offers" ? "hidden" : undefined}>
           {!isBase && (
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[16px] bg-amethyst/10 px-4 py-3 text-sm text-muted-foreground">
               <span>
@@ -394,14 +398,11 @@ export function ArticleEditor({ article, translations = [] }: Props) {
             onChange={(html) => (isBase ? set("content_html", html) : setLang("body_html", html))}
             placeholder={isBase ? "Start writing your post…" : "Translated article body…"}
           />
+          </div>
         </div>
 
         {/* ---------- RIGHT PANEL ---------- */}
         <aside className="space-y-4 border-border px-4 py-8 md:px-8 xl:sticky xl:top-16 xl:max-h-[calc(100vh-4rem)] xl:self-start xl:overflow-y-auto xl:border-l xl:px-5">
-          {panel === "offers" && (
-            <ArticleOffers articleId={article?.id ?? null} locale={locale} />
-          )}
-
           {panel === "block" && (
             <div className="space-y-3 rounded-[20px] border border-border bg-card p-4">
               {!isBase && (
