@@ -12,13 +12,14 @@ import { LOCALES, DEFAULT_LOCALE, type LocaleCode } from "@/lib/i18n";
 import { analyzeContentSeo } from "@/lib/seo-analyzer";
 import { RichTextEditor } from "./RichTextEditor";
 import { SeoScoreCard, SerpPreview } from "./SeoScoreCard";
+import { ArticleOffers } from "./ArticleOffers";
 
 interface Props {
   article?: ArticleDTO | null;
   translations?: TranslationDTO[];
 }
 
-type Panel = "block" | "seo" | "social" | "schema";
+type Panel = "block" | "seo" | "social" | "schema" | "offers";
 
 interface LangDraft {
   title: string;
@@ -259,6 +260,7 @@ export function ArticleEditor({ article, translations = [] }: Props) {
     { id: "seo", label: "SEO" },
     { id: "social", label: "Social" },
     { id: "schema", label: "Schema" },
+    { id: "offers", label: "Offers" },
   ];
 
   return (
@@ -396,6 +398,10 @@ export function ArticleEditor({ article, translations = [] }: Props) {
 
         {/* ---------- RIGHT PANEL ---------- */}
         <aside className="space-y-4 border-border px-4 py-8 md:px-8 xl:sticky xl:top-16 xl:max-h-[calc(100vh-4rem)] xl:self-start xl:overflow-y-auto xl:border-l xl:px-5">
+          {panel === "offers" && (
+            <ArticleOffers articleId={article?.id ?? null} locale={locale} />
+          )}
+
           {panel === "block" && (
             <div className="space-y-3 rounded-[20px] border border-border bg-card p-4">
               {!isBase && (
