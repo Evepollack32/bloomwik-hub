@@ -162,7 +162,7 @@
   .cat-technology{ background: color-mix(in oklab, var(--navy) 14%, transparent); color: var(--navy); }
   .cat-culture   { background: color-mix(in oklab, var(--amethyst) 18%, transparent); color: var(--amethyst); }
 
-  .container-x { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: 1.25rem; }
+  .container-x { width: 90%; max-width: 1800px; margin-inline: auto; padding-inline: 1.25rem; }
   @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
 
   .prose-blog p { font-size: 1.125rem; line-height: 1.75; margin-bottom: 1.25rem; }

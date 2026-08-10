@@ -1,3 +1,4 @@
+import { LOCALE_CODES } from "@/lib/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -125,7 +126,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@type": "WebSite",
           name: siteName,
           url: "/",
-          inLanguage: ["en-US","en-GB","es","fr","de","it","pt-BR","ja","zh","ko","ar","hi","ru","tr","nl"],
+          inLanguage: LOCALE_CODES as string[],
           potentialAction: {
             "@type": "SearchAction",
             target: "/?q={search_term_string}",

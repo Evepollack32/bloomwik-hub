@@ -220,7 +220,7 @@ function ArticlePage() {
       {related.length > 0 && (
         <section className="container-x py-12">
           <h2 className="mb-8 font-serif text-3xl">{t("more_in")} {article.category_name}</h2>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {related.map((a) => (<ArticleCard key={a.id} article={a} />))}
           </div>
         </section>
