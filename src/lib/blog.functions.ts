@@ -140,7 +140,6 @@ export interface AdDTO {
 function mapArticle(row: any): ArticleDTO {
   return {
     id: row.id,
-    article_id: row.article_id ?? null,
     locale: row.locale ?? "en-US",
     slug: row.slug,
     title: row.title,
