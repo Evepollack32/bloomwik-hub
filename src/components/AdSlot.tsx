@@ -6,6 +6,8 @@ import { pickAd, type AdSlotName } from "@/lib/blog.functions";
 interface Props {
   variant?: AdSlotName;
   className?: string;
+  /** Optional wrapper element — rendered only when an ad actually exists. */
+  wrapperClassName?: string;
   id?: string;
 }
 

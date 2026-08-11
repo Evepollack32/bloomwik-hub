@@ -163,12 +163,10 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Top leaderboard ad */}
-      <div className="container-x mt-10">
-        <AdSlot variant="leaderboard" />
-      </div>
+      {/* Top leaderboard ad — the wrapper disappears entirely when no ad exists */}
+      <AdSlot variant="leaderboard" wrapperClassName="container-x mt-10" />
 
-      {/* Latest stories — single expanded grid */}
+      {/* Latest stories — one uniform grid, never broken up mid-row */}
       <section className="container-x py-16">
         <div className="mb-8 flex items-end justify-between">
           <h2 className="font-serif text-3xl md:text-4xl">{t("latest")}</h2>
@@ -177,31 +175,15 @@ function HomePage() {
           <p className="py-20 text-center text-muted-foreground">No stories yet.</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {latest.slice(0, 3).map((a) => (
-              <ArticleCard key={a.id} article={a} />
-            ))}
-          </div>
-        )}
-        {latest.length > 3 && (
-          <>
-            <div className="my-12">
-              <AdSlot variant="billboard" />
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-              {latest.slice(3, 9).map((a) => (
-                <ArticleCard key={a.id} article={a} />
-              ))}
-            </div>
-          </>
-        )}
-        {latest.length > 9 && (
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {latest.slice(9).map((a) => (
+            {latest.map((a) => (
               <ArticleCard key={a.id} article={a} />
             ))}
           </div>
         )}
       </section>
+
+      <AdSlot variant="billboard" wrapperClassName="container-x pb-16" />
+
 
       {/* Popular stories — numbered editorial list */}
       {popular.length > 0 && (
