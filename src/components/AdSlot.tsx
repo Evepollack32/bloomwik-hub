@@ -18,7 +18,7 @@ const dims: Record<AdSlotName, string> = {
   inline: "h-[140px]",
 };
 
-export function AdSlot({ variant = "leaderboard", className = "", id }: Props) {
+export function AdSlot({ variant = "leaderboard", className = "", wrapperClassName, id }: Props) {
   const { t } = useLocale();
   const pick = useServerFn(pickAd);
   const { data: ad } = useQuery({
