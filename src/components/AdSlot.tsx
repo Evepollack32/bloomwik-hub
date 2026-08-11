@@ -62,7 +62,7 @@ export function AdSlot({ variant = "leaderboard", className = "", wrapperClassNa
     inner
   );
 
-  return (
+  const slot = (
     <aside
       id={id}
       role="complementary"
@@ -76,4 +76,6 @@ export function AdSlot({ variant = "leaderboard", className = "", wrapperClassNa
       {wrapped}
     </aside>
   );
+
+  return wrapperClassName ? <div className={wrapperClassName}>{slot}</div> : slot;
 }
