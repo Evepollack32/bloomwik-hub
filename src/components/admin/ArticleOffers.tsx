@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -10,13 +10,12 @@ import { LOCALES, type LocaleCode } from "@/lib/i18n";
 
 interface Props {
   articleId?: string | null;
-  /** Locale currently selected in the editor header. */
+  /** Locale currently selected in the editor header — offers are scoped to it. */
   locale: LocaleCode;
 }
 
 type Draft = {
   id?: string;
-  locale: string;
   title: string;
   description: string;
   image_url: string;
@@ -28,8 +27,7 @@ type Draft = {
   sort_order: number;
 };
 
-const emptyDraft = (locale: string): Draft => ({
-  locale,
+const emptyDraft = (): Draft => ({
   title: "",
   description: "",
   image_url: "",
@@ -50,8 +48,8 @@ export function ArticleOffers({ articleId, locale }: Props) {
   const save = useServerFn(adminUpsertOffer);
   const remove = useServerFn(adminDeleteOffer);
 
-  const [tab, setTab] = useState<LocaleCode>(locale);
   const [draft, setDraft] = useState<Draft | null>(null);
+  const localeMeta = LOCALES.find((l) => l.code === locale);
 
   const { data: offers = [], isLoading } = useQuery({
     queryKey: ["articleOffers", articleId],
@@ -59,19 +57,13 @@ export function ArticleOffers({ articleId, locale }: Props) {
     enabled: !!articleId,
   });
 
-  const counts = useMemo(() => {
-    const m: Record<string, number> = {};
-    (offers as OfferDTO[]).forEach((o) => { m[o.locale] = (m[o.locale] ?? 0) + 1; });
-    return m;
-  }, [offers]);
-
   const saveMut = useMutation({
     mutationFn: (d: Draft) =>
       save({
         data: {
           id: d.id,
           article_id: articleId!,
-          locale: d.locale,
+          locale,
           title: d.title.trim(),
           description: d.description.trim() || null,
           image_url: d.image_url.trim() || null,
@@ -105,12 +97,12 @@ export function ArticleOffers({ articleId, locale }: Props) {
   if (!articleId) {
     return (
       <p className="rounded-[20px] border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-        Save the article first — then you can attach sponsored offers per language.
+        Save the article first — then you can attach sponsored offers.
       </p>
     );
   }
 
-  const visible = (offers as OfferDTO[]).filter((o) => o.locale === tab);
+  const visible = (offers as OfferDTO[]).filter((o) => o.locale === locale);
 
   return (
     <div className="space-y-5">
@@ -118,37 +110,21 @@ export function ArticleOffers({ articleId, locale }: Props) {
         <div>
           <h2 className="font-serif text-2xl">Sponsored offers</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Shown in this article's sidebar under the trending rail. Links render{" "}
+            Shown in this article's sidebar under the trending rail for{" "}
+            <strong className="text-foreground">
+              {localeMeta?.flag} {localeMeta?.label ?? locale}
+            </strong>
+            . Switch the language above to manage another version. Links render{" "}
             <code>rel="sponsored nofollow"</code>.
           </p>
         </div>
         <button
           type="button"
-          onClick={() => setDraft(emptyDraft(tab))}
+          onClick={() => setDraft(emptyDraft())}
           className="inline-flex items-center gap-2 rounded-[14px] bg-navy px-4 py-2 text-sm font-bold text-champagne"
         >
           <Plus className="h-4 w-4" /> New offer
         </button>
-      </div>
-
-      <div className="flex flex-wrap gap-2 border-b border-border pb-3">
-        {LOCALES.map((l) => (
-          <button
-            key={l.code}
-            type="button"
-            onClick={() => setTab(l.code)}
-            className={`rounded-[14px] px-3 py-1.5 text-sm transition ${
-              tab === l.code ? "bg-navy text-champagne" : "hover:bg-muted"
-            }`}
-            title={l.label}
-          >
-            <span className="mr-1.5">{l.flag}</span>
-            {l.native}
-            {counts[l.code] ? (
-              <span className="ml-2 rounded-full bg-muted px-1.5 text-xs text-foreground">{counts[l.code]}</span>
-            ) : null}
-          </button>
-        ))}
       </div>
 
       {draft && (
@@ -156,7 +132,7 @@ export function ArticleOffers({ articleId, locale }: Props) {
           <div className="flex items-center justify-between md:col-span-2">
             <h3 className="font-serif text-lg">{draft.id ? "Edit offer" : "New offer"}</h3>
             <span className="text-sm text-muted-foreground">
-              {LOCALES.find((l) => l.code === draft.locale)?.flag} {draft.locale}
+              {localeMeta?.flag} {locale}
             </span>
           </div>
           <div className="md:col-span-2">
@@ -188,14 +164,6 @@ export function ArticleOffers({ articleId, locale }: Props) {
             <input className={inp} placeholder="from €49" value={draft.price} onChange={(e) => setDraft({ ...draft, price: e.target.value })} />
           </div>
           <div>
-            <label className={lab}>Locale</label>
-            <select className={inp} value={draft.locale} onChange={(e) => setDraft({ ...draft, locale: e.target.value })}>
-              {LOCALES.map((l) => (
-                <option key={l.code} value={l.code}>{l.flag} {l.native} — {l.label}</option>
-              ))}
-            </select>
-          </div>
-          <div>
             <label className={lab}>Sort order</label>
             <input type="number" className={inp} value={draft.sort_order} onChange={(e) => setDraft({ ...draft, sort_order: Number(e.target.value) })} />
           </div>
@@ -223,7 +191,7 @@ export function ArticleOffers({ articleId, locale }: Props) {
         {isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
         {!isLoading && visible.length === 0 && (
           <p className="rounded-[20px] border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-            No offers for this language yet.
+            No offers for this language version yet.
           </p>
         )}
         {visible.map((o) => (
@@ -242,7 +210,6 @@ export function ArticleOffers({ articleId, locale }: Props) {
               onClick={() =>
                 setDraft({
                   id: o.id,
-                  locale: o.locale,
                   title: o.title,
                   description: o.description ?? "",
                   image_url: o.image_url ?? "",
