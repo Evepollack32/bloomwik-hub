@@ -6,6 +6,8 @@ import { pickAd, type AdSlotName } from "@/lib/blog.functions";
 interface Props {
   variant?: AdSlotName;
   className?: string;
+  /** Optional wrapper element — rendered only when an ad actually exists. */
+  wrapperClassName?: string;
   id?: string;
 }
 
@@ -16,7 +18,7 @@ const dims: Record<AdSlotName, string> = {
   inline: "h-[140px]",
 };
 
-export function AdSlot({ variant = "leaderboard", className = "", id }: Props) {
+export function AdSlot({ variant = "leaderboard", className = "", wrapperClassName, id }: Props) {
   const { t } = useLocale();
   const pick = useServerFn(pickAd);
   const { data: ad } = useQuery({
@@ -60,7 +62,7 @@ export function AdSlot({ variant = "leaderboard", className = "", id }: Props) {
     inner
   );
 
-  return (
+  const slot = (
     <aside
       id={id}
       role="complementary"
@@ -74,4 +76,6 @@ export function AdSlot({ variant = "leaderboard", className = "", id }: Props) {
       {wrapped}
     </aside>
   );
+
+  return wrapperClassName ? <div className={wrapperClassName}>{slot}</div> : slot;
 }

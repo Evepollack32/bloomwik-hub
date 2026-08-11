@@ -13,12 +13,18 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as IndexnowKeyDottxtRouteImport } from './routes/$indexnowKey[.]txt'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthorsRouteImport } from './routes/authors'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as SitemapArticlesDotxmlRouteImport } from './routes/sitemap-articles[.]xml'
+import { Route as SitemapAuthorsDotxmlRouteImport } from './routes/sitemap-authors[.]xml'
+import { Route as SitemapCategoriesDotxmlRouteImport } from './routes/sitemap-categories[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ArticleSlugRouteImport } from './routes/article.$slug'
+import { Route as AuthorSlugRouteImport } from './routes/author.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin/ads'
@@ -56,6 +62,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthorsRoute = AuthorsRouteImport.update({
+  id: '/authors',
+  path: '/authors',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoriesRoute = CategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -71,6 +82,26 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapArticlesDotxmlRoute = SitemapArticlesDotxmlRouteImport.update({
+  id: '/sitemap-articles.xml',
+  path: '/sitemap-articles.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapAuthorsDotxmlRoute = SitemapAuthorsDotxmlRouteImport.update({
+  id: '/sitemap-authors.xml',
+  path: '/sitemap-authors.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCategoriesDotxmlRoute = SitemapCategoriesDotxmlRouteImport.update({
+  id: '/sitemap-categories.xml',
+  path: '/sitemap-categories.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -84,6 +115,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 const ArticleSlugRoute = ArticleSlugRouteImport.update({
   id: '/article/$slug',
   path: '/article/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorSlugRoute = AuthorSlugRouteImport.update({
+  id: '/author/$slug',
+  path: '/author/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -188,12 +224,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
   '/about': typeof AboutRoute
+  '/authors': typeof AuthorsRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/article/$slug': typeof ArticleSlugRoute
+  '/author/$slug': typeof AuthorSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -216,11 +258,17 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
   '/about': typeof AboutRoute
+  '/authors': typeof AuthorsRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/article/$slug': typeof ArticleSlugRoute
+  '/author/$slug': typeof AuthorSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -244,12 +292,18 @@ export interface FileRoutesById {
   '/$indexnowKey.txt': typeof IndexnowKeyDottxtRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/authors': typeof AuthorsRoute
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/article/$slug': typeof ArticleSlugRoute
+  '/author/$slug': typeof AuthorSlugRoute
   '/category/$slug': typeof CategorySlugRoute
   '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
@@ -274,12 +328,18 @@ export interface FileRouteTypes {
     | '/'
     | '/$indexnowKey.txt'
     | '/about'
+    | '/authors'
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/admin'
     | '/article/$slug'
+    | '/author/$slug'
     | '/category/$slug'
     | '/admin/ads'
     | '/admin/analytics'
@@ -302,11 +362,17 @@ export interface FileRouteTypes {
     | '/'
     | '/$indexnowKey.txt'
     | '/about'
+    | '/authors'
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/article/$slug'
+    | '/author/$slug'
     | '/category/$slug'
     | '/admin/ads'
     | '/admin/analytics'
@@ -329,12 +395,18 @@ export interface FileRouteTypes {
     | '/$indexnowKey.txt'
     | '/_authenticated'
     | '/about'
+    | '/authors'
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/article/$slug'
+    | '/author/$slug'
     | '/category/$slug'
     | '/_authenticated/admin/ads'
     | '/_authenticated/admin/analytics'
@@ -359,11 +431,17 @@ export interface RootRouteChildren {
   IndexnowKeyDottxtRoute: typeof IndexnowKeyDottxtRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AuthorsRoute: typeof AuthorsRoute
   CategoriesRoute: typeof CategoriesRoute
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
+  SitemapArticlesDotxmlRoute: typeof SitemapArticlesDotxmlRoute
+  SitemapAuthorsDotxmlRoute: typeof SitemapAuthorsDotxmlRoute
+  SitemapCategoriesDotxmlRoute: typeof SitemapCategoriesDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ArticleSlugRoute: typeof ArticleSlugRoute
+  AuthorSlugRoute: typeof AuthorSlugRoute
   CategorySlugRoute: typeof CategorySlugRoute
 }
 
@@ -397,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/authors': {
+      id: '/authors'
+      path: '/authors'
+      fullPath: '/authors'
+      preLoaderRoute: typeof AuthorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/categories': {
       id: '/categories'
       path: '/categories'
@@ -418,6 +503,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap-articles.xml': {
+      id: '/sitemap-articles.xml'
+      path: '/sitemap-articles.xml'
+      fullPath: '/sitemap-articles.xml'
+      preLoaderRoute: typeof SitemapArticlesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-authors.xml': {
+      id: '/sitemap-authors.xml'
+      path: '/sitemap-authors.xml'
+      fullPath: '/sitemap-authors.xml'
+      preLoaderRoute: typeof SitemapAuthorsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-categories.xml': {
+      id: '/sitemap-categories.xml'
+      path: '/sitemap-categories.xml'
+      fullPath: '/sitemap-categories.xml'
+      preLoaderRoute: typeof SitemapCategoriesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -437,6 +550,13 @@ declare module '@tanstack/react-router' {
       path: '/article/$slug'
       fullPath: '/article/$slug'
       preLoaderRoute: typeof ArticleSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/author/$slug': {
+      id: '/author/$slug'
+      path: '/author/$slug'
+      fullPath: '/author/$slug'
+      preLoaderRoute: typeof AuthorSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -631,11 +751,17 @@ const rootRouteChildren: RootRouteChildren = {
   IndexnowKeyDottxtRoute: IndexnowKeyDottxtRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  AuthorsRoute: AuthorsRoute,
   CategoriesRoute: CategoriesRoute,
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
+  SitemapArticlesDotxmlRoute: SitemapArticlesDotxmlRoute,
+  SitemapAuthorsDotxmlRoute: SitemapAuthorsDotxmlRoute,
+  SitemapCategoriesDotxmlRoute: SitemapCategoriesDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ArticleSlugRoute: ArticleSlugRoute,
+  AuthorSlugRoute: AuthorSlugRoute,
   CategorySlugRoute: CategorySlugRoute,
 }
 export const routeTree = rootRouteImport
