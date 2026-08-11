@@ -189,10 +189,37 @@ function ArticlePage() {
 
           <ArticleComments articleId={article.id} />
 
-          <div className="mt-10 rounded-[20px] border border-border p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">About the author</p>
-            <p className="mt-2 font-serif text-2xl">{article.author}</p>
-            <p className="mt-1 text-sm text-muted-foreground">Writes about {article.category_name.toLowerCase()} for Atlas & Ember.</p>
+          <div className="mt-10 flex gap-4 rounded-[20px] border border-border p-6">
+            {article.author_avatar && (
+              <img
+                src={article.author_avatar}
+                alt={article.author}
+                loading="lazy"
+                className="h-16 w-16 flex-none rounded-full object-cover"
+              />
+            )}
+            <div className="min-w-0">
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">About the author</p>
+              {article.author_slug ? (
+                <Link to="/author/$slug" params={{ slug: article.author_slug }} className="mt-2 block font-serif text-2xl hover:text-amethyst">
+                  {article.author}
+                </Link>
+              ) : (
+                <p className="mt-2 font-serif text-2xl">{article.author}</p>
+              )}
+              <p className="mt-1 text-sm text-muted-foreground">
+                {article.author_bio ?? `Writes about ${article.category_name.toLowerCase()} for Bloomwik.`}
+              </p>
+              {article.author_slug && (
+                <Link
+                  to="/author/$slug"
+                  params={{ slug: article.author_slug }}
+                  className="mt-3 inline-block text-sm font-semibold text-amethyst"
+                >
+                  View all stories →
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
