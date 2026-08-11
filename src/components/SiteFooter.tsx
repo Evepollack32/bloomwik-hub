@@ -63,6 +63,7 @@ export function SiteFooter() {
           <h3 className="text-xs uppercase tracking-[0.2em] text-champagne/60">{t("brand")}</h3>
           <ul className="mt-4 space-y-2 text-sm">
             <li><Link to="/about" className="text-champagne/80 hover:text-ruby">{t("nav_about")}</Link></li>
+            <li><Link to="/authors" className="text-champagne/80 hover:text-ruby">Authors</Link></li>
             <li><Link to="/contact" className="text-champagne/80 hover:text-ruby">{t("nav_contact")}</Link></li>
             <li><a href="/sitemap.xml" className="text-champagne/80 hover:text-ruby">Sitemap</a></li>
             <li><a href="/llms.txt" className="text-champagne/80 hover:text-ruby">llms.txt</a></li>
