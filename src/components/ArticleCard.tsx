@@ -60,8 +60,19 @@ export function ArticleCard({
           <p className="line-clamp-2 text-sm text-muted-foreground">{article.excerpt}</p>
         )}
         <p className="mt-auto text-xs text-muted-foreground">
-          {t("by")} <span className="font-medium text-foreground">{article.author}</span> ·{" "}
-          {new Date(date).toLocaleDateString()}
+          {t("by")}{" "}
+          {article.author_slug ? (
+            <Link
+              to="/author/$slug"
+              params={{ slug: article.author_slug }}
+              className="font-medium text-foreground hover:text-amethyst"
+            >
+              {article.author}
+            </Link>
+          ) : (
+            <span className="font-medium text-foreground">{article.author}</span>
+          )}{" "}
+          · {new Date(date).toLocaleDateString()}
         </p>
       </div>
     </article>
