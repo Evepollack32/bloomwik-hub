@@ -17,6 +17,10 @@ import { Route as AuthorsRouteImport } from './routes/authors'
 import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as SitemapArticlesDotxmlRouteImport } from './routes/sitemap-articles[.]xml'
+import { Route as SitemapAuthorsDotxmlRouteImport } from './routes/sitemap-authors[.]xml'
+import { Route as SitemapCategoriesDotxmlRouteImport } from './routes/sitemap-categories[.]xml'
+import { Route as SitemapPagesDotxmlRouteImport } from './routes/sitemap-pages[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ArticleSlugRouteImport } from './routes/article.$slug'
@@ -76,6 +80,26 @@ const ContactRoute = ContactRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapArticlesDotxmlRoute = SitemapArticlesDotxmlRouteImport.update({
+  id: '/sitemap-articles.xml',
+  path: '/sitemap-articles.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapAuthorsDotxmlRoute = SitemapAuthorsDotxmlRouteImport.update({
+  id: '/sitemap-authors.xml',
+  path: '/sitemap-authors.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapCategoriesDotxmlRoute = SitemapCategoriesDotxmlRouteImport.update({
+  id: '/sitemap-categories.xml',
+  path: '/sitemap-categories.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPagesDotxmlRoute = SitemapPagesDotxmlRouteImport.update({
+  id: '/sitemap-pages.xml',
+  path: '/sitemap-pages.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -204,6 +228,10 @@ export interface FileRoutesByFullPath {
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/article/$slug': typeof ArticleSlugRoute
@@ -234,6 +262,10 @@ export interface FileRoutesByTo {
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/article/$slug': typeof ArticleSlugRoute
   '/author/$slug': typeof AuthorSlugRoute
@@ -264,6 +296,10 @@ export interface FileRoutesById {
   '/categories': typeof CategoriesRoute
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
+  '/sitemap-articles.xml': typeof SitemapArticlesDotxmlRoute
+  '/sitemap-authors.xml': typeof SitemapAuthorsDotxmlRoute
+  '/sitemap-categories.xml': typeof SitemapCategoriesDotxmlRoute
+  '/sitemap-pages.xml': typeof SitemapPagesDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/article/$slug': typeof ArticleSlugRoute
@@ -296,6 +332,10 @@ export interface FileRouteTypes {
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/admin'
     | '/article/$slug'
@@ -326,6 +366,10 @@ export interface FileRouteTypes {
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/article/$slug'
     | '/author/$slug'
@@ -355,6 +399,10 @@ export interface FileRouteTypes {
     | '/categories'
     | '/contact'
     | '/login'
+    | '/sitemap-articles.xml'
+    | '/sitemap-authors.xml'
+    | '/sitemap-categories.xml'
+    | '/sitemap-pages.xml'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/article/$slug'
@@ -387,6 +435,10 @@ export interface RootRouteChildren {
   CategoriesRoute: typeof CategoriesRoute
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
+  SitemapArticlesDotxmlRoute: typeof SitemapArticlesDotxmlRoute
+  SitemapAuthorsDotxmlRoute: typeof SitemapAuthorsDotxmlRoute
+  SitemapCategoriesDotxmlRoute: typeof SitemapCategoriesDotxmlRoute
+  SitemapPagesDotxmlRoute: typeof SitemapPagesDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ArticleSlugRoute: typeof ArticleSlugRoute
   AuthorSlugRoute: typeof AuthorSlugRoute
@@ -449,6 +501,34 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-articles.xml': {
+      id: '/sitemap-articles.xml'
+      path: '/sitemap-articles.xml'
+      fullPath: '/sitemap-articles.xml'
+      preLoaderRoute: typeof SitemapArticlesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-authors.xml': {
+      id: '/sitemap-authors.xml'
+      path: '/sitemap-authors.xml'
+      fullPath: '/sitemap-authors.xml'
+      preLoaderRoute: typeof SitemapAuthorsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-categories.xml': {
+      id: '/sitemap-categories.xml'
+      path: '/sitemap-categories.xml'
+      fullPath: '/sitemap-categories.xml'
+      preLoaderRoute: typeof SitemapCategoriesDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-pages.xml': {
+      id: '/sitemap-pages.xml'
+      path: '/sitemap-pages.xml'
+      fullPath: '/sitemap-pages.xml'
+      preLoaderRoute: typeof SitemapPagesDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -675,6 +755,10 @@ const rootRouteChildren: RootRouteChildren = {
   CategoriesRoute: CategoriesRoute,
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
+  SitemapArticlesDotxmlRoute: SitemapArticlesDotxmlRoute,
+  SitemapAuthorsDotxmlRoute: SitemapAuthorsDotxmlRoute,
+  SitemapCategoriesDotxmlRoute: SitemapCategoriesDotxmlRoute,
+  SitemapPagesDotxmlRoute: SitemapPagesDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ArticleSlugRoute: ArticleSlugRoute,
   AuthorSlugRoute: AuthorSlugRoute,
