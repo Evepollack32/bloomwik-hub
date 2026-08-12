@@ -1,8 +1,8 @@
-# Atlas & Ember
+# Bloomwik Hub
 
 > An editorial multilingual blog covering travel, fashion, food, technology and culture. Stories are written in English and translated into 15 languages on demand.
 
-Atlas & Ember publishes long-form editorial articles for curious readers worldwide. Every article carries a clear category, author, publication date, and the country/region it is set in. The site supports 15 interface languages with hreflang tags and an AI-powered article translator.
+Bloomwik Hub publishes long-form editorial articles for curious readers worldwide. Every article carries a clear category, author, publication date, and the country/region it is set in. The site supports 15 interface languages with hreflang tags and an AI-powered article translator.
 
 ## Pages
 

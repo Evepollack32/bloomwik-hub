@@ -1,17 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { ArrowRight } from "lucide-react";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
 import { useLocale } from "@/lib/locale-context";
 import { hreflangLinks } from "@/lib/seo";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { getHomeFeed, type ArticleDTO, type CategoryDTO } from "@/lib/blog.functions";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   loader: async ({ deps }): Promise<{
     categories: CategoryDTO[];
@@ -22,20 +22,21 @@ export const Route = createFileRoute("/")({
   }> => (await getHomeFeed({ data: { locale: deps.lang ?? "en-US" } })) as any,
   head: () => ({
     meta: [
-      { title: "Bloomwik— Travel, fashion, food, technology & culture" },
+      { title: "Bloomwik Hub — Travel, fashion, food, technology & culture" },
       {
         name: "description",
         content:
           "An editorial multilingual blog covering travel, fashion, food, technology and culture. Translated into 15 languages.",
       },
-      { property: "og:title", content: "Bloomwik— Travel, fashion, food, technology & culture" },
+      { name: "keywords", content: "travel blog, fashion, food, technology, culture, multilingual magazine, Bloomwik Hub" },
+      { property: "og:title", content: "Bloomwik Hub — Travel, fashion, food, technology & culture" },
       {
         property: "og:description",
         content: "An editorial multilingual blog covering travel, fashion, food, technology and culture. Translated into 15 languages.",
       },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: `${SITE_URL}/` },
     ],
-    links: [{ rel: "canonical", href: "/" }, ...hreflangLinks("/")],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }, ...hreflangLinks("/")],
   }),
   errorComponent: ({ error }) => (
     <div className="container-x py-20 text-center text-muted-foreground">
@@ -289,7 +290,7 @@ function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Atlas & Ember — Latest stories",
+            name: "Bloomwik Hub — Latest stories",
             hasPart: articles.map((a) => ({
               "@type": "Article",
               headline: a.title,

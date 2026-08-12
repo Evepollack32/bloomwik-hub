@@ -3,14 +3,13 @@ import { Globe, Mail, Twitter, Instagram, Linkedin } from "lucide-react";
 import { ArticleCard } from "@/components/ArticleCard";
 import { hreflangLinks } from "@/lib/seo";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { getAuthorFeed, type ArticleDTO, type AuthorDTO } from "@/lib/blog.functions";
 
 const SITE = "https://bloomwik-hub.lovable.app";
 
 export const Route = createFileRoute("/author/$slug")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loader: async ({ params }): Promise<{ author: AuthorDTO; articles: ArticleDTO[] }> => {
     const res = (await getAuthorFeed({ data: { slug: params.slug } })) as any;
     if (!res.author) throw notFound();
@@ -18,10 +17,10 @@ export const Route = createFileRoute("/author/$slug")({
   },
   head: ({ params, loaderData }) => {
     const a = loaderData?.author;
-    const title = a ? `${a.name}${a.title ? ` — ${a.title}` : ""} · Bloomwik` : "Author";
+    const title = a ? `${a.name}${a.title ? ` — ${a.title}` : ""} · Bloomwik Hub` : "Author";
     const desc =
       a?.seo_description ??
-      (a?.bio ? a.bio.slice(0, 155) : `Stories written by ${a?.name ?? "our author"} on Bloomwik.`);
+      (a?.bio ? a.bio.slice(0, 155) : `Stories written by ${a?.name ?? "our author"} on Bloomwik Hub.`);
     const path = `/author/${params.slug}`;
     return {
       meta: [

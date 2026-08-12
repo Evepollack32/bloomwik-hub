@@ -47,7 +47,7 @@ function SettingsPage() {
             <div className="sm:col-span-2"><span className={label}>Site URL (used for IndexNow &amp; canonicals)</span><input className={field} value={form.site_url} onChange={(e) => set("site_url", e.target.value)} placeholder="https://example.com" /></div>
             <div className="sm:col-span-2"><span className={label}>Default share image URL</span><input className={field} value={form.default_og_image} onChange={(e) => set("default_og_image", e.target.value)} /></div>
             <div className="sm:col-span-2"><span className={label}>Default meta keywords (comma separated)</span><input className={field} value={form.default_keywords} onChange={(e) => set("default_keywords", e.target.value)} placeholder="travel, fashion, food, culture" /></div>
-            <div><span className={label}>Twitter / X handle</span><input className={field} value={form.twitter_handle} onChange={(e) => set("twitter_handle", e.target.value)} placeholder="@atlasember" /></div>
+            <div><span className={label}>Twitter / X handle</span><input className={field} value={form.twitter_handle} onChange={(e) => set("twitter_handle", e.target.value)} placeholder="@bloomwikhub" /></div>
             <div><span className={label}>Google Analytics ID</span><input className={field} value={form.ga_measurement_id} onChange={(e) => set("ga_measurement_id", e.target.value)} placeholder="G-XXXXXXX" /></div>
           </div>
         </section>

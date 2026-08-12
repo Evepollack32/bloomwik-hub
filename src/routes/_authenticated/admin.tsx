@@ -6,7 +6,7 @@ import { checkIsAdmin } from "@/lib/blog.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — Atlas & Ember" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Admin — Bloomwik Hub" }, { name: "robots", content: "noindex" }] }),
   component: AdminLayout,
 });
 

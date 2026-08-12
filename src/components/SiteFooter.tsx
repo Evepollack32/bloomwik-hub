@@ -21,8 +21,8 @@ export function SiteFooter() {
       <div className="container-x grid gap-12 py-16 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-baseline gap-2">
-            <span className="font-serif text-3xl">Atlas</span>
-            <span className="text-xs uppercase tracking-[0.3em] text-ruby">& Ember</span>
+            <span className="font-serif text-3xl">Bloomwik</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-ruby">Hub</span>
           </div>
           <p className="mt-4 max-w-md text-sm/6 text-champagne/70">{t("tagline")}</p>
           <form className="mt-6 flex max-w-md gap-2" onSubmit={(e) => { e.preventDefault(); subMut.mutate(); }}>
@@ -73,8 +73,7 @@ export function SiteFooter() {
 
       <div className="border-t border-champagne/10">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-6 text-xs text-champagne/60 sm:flex-row">
-          <p>© {new Date().getFullYear()} Atlas & Ember. {t("rights")}</p>
-          <p>Translated by AI · Edited by humans</p>
+          <p>© {new Date().getFullYear()} Bloomwik Hub. {t("rights")}</p>
         </div>
       </div>
     </footer>

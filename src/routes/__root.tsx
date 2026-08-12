@@ -15,6 +15,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import { Toaster } from "@/components/ui/sonner";
+import { friendlyErrorMessage } from "@/lib/friendly-error";
 import { getPublicSettings, DEFAULT_SETTINGS, type CustomMetaTag } from "@/lib/engagement.functions";
 
 
@@ -45,7 +46,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-[70vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="font-serif text-2xl text-foreground">This page didn't load</h1>
-        <p className="mt-3 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-3 text-sm text-muted-foreground">{friendlyErrorMessage(error, "public")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
@@ -68,7 +69,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   },
   head: ({ loaderData }) => {
     const s = { ...DEFAULT_SETTINGS, ...(loaderData?.settings ?? {}) };
-    const siteName = s.site_name || "Atlas & Ember";
+    const siteName = s.site_name || "Bloomwik Hub";
     const title = s.tagline ? `${siteName} — ${s.tagline}` : siteName;
     const description =
       s.description ||
@@ -104,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: s.twitter_handle || "@atlasember" },
+      { name: "twitter:site", content: s.twitter_handle || "@bloomwikhub" },
       // GEO defaults; overridden per-article
       { name: "geo.region", content: "US" },
       { name: "geo.placename", content: "Worldwide" },

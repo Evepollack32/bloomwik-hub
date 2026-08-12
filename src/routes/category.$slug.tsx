@@ -1,14 +1,14 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
 import { hreflangLinks } from "@/lib/seo";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { getCategoryFeed, type ArticleDTO, type CategoryDTO } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/category/$slug")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   loader: async ({ params, deps }): Promise<{ category: CategoryDTO; articles: ArticleDTO[] }> => {
     const res = (await getCategoryFeed({ data: { slug: params.slug, locale: deps.lang ?? "en-US" } })) as any;
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/category/$slug")({
   },
   head: ({ params, loaderData }) => {
     const cat = loaderData?.category;
-    const title = cat ? `${cat.name} — Atlas & Ember` : "Category";
+    const title = cat ? `${cat.name} — Bloomwik Hub` : "Category";
     const desc = cat?.blurb ?? "";
     const path = `/category/${params.slug}`;
     return {
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/category/$slug")({
         { property: "og:description", content: desc },
         { property: "og:url", content: path },
       ],
-      links: [{ rel: "canonical", href: path }, ...hreflangLinks(path)],
+      links: [{ rel: "canonical", href: `${SITE_URL}${path}` }, ...hreflangLinks(path)],
     };
   },
   component: CategoryPage,

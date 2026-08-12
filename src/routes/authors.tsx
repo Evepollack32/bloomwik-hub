@@ -1,18 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { hreflangLinks } from "@/lib/seo";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { listAuthors, type AuthorDTO } from "@/lib/blog.functions";
 
 const SITE = "https://bloomwik-hub.lovable.app";
 
 export const Route = createFileRoute("/authors")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loader: async (): Promise<AuthorDTO[]> => (await listAuthors()) as AuthorDTO[],
   head: () => {
-    const title = "Our writers — Bloomwik";
-    const desc = "Meet the Bloomwik editorial team: the writers behind our travel, food, fashion, tech and culture stories.";
+    const title = "Our writers — Bloomwik Hub";
+    const desc = "Meet the Bloomwik Hub editorial team: the writers behind our travel, food, fashion, tech and culture stories.";
     return {
       meta: [
         { title },
