@@ -12,11 +12,25 @@ export function useAuth() {
       setSession(s);
       setUser(s?.user ?? null);
     });
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setUser(s?.user ?? null);
-      setLoading(false);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data: { session: s }, error }) => {
+        // A stale/invalid refresh token must not bubble up as a raw JWT error.
+        if (error) {
+          void supabase.auth.signOut({ scope: "local" }).catch(() => {});
+          setSession(null);
+          setUser(null);
+        } else {
+          setSession(s);
+          setUser(s?.user ?? null);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+      });
     return () => sub.subscription.unsubscribe();
   }, []);
 

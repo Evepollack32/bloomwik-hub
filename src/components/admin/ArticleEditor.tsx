@@ -1,4 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useAutosave, loadDraft, clearDraft } from "@/hooks/use-autosave";
+import { friendlyErrorMessage, isAuthError } from "@/lib/friendly-error";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
@@ -91,7 +93,7 @@ export function ArticleEditor({ article, translations = [] }: Props) {
     content_html: article?.content_html ?? "",
     category_id: article?.category_id ?? "",
     author_id: article?.author_id ?? "",
-    author: article?.author ?? "Atlas & Ember",
+    author: article?.author ?? "Bloomwik Hub",
     image_url: article?.image_url ?? "",
     image_alt: article?.image_alt ?? "",
     reading_minutes: article?.reading_minutes ?? 5,
@@ -116,6 +118,26 @@ export function ArticleEditor({ article, translations = [] }: Props) {
     seo_description: article?.seo_description ?? "",
     seo_keywords: article?.seo_keywords ?? "",
   });
+
+  // ---------- AUTOSAVE ----------
+  const draftKey = `article:${article?.id ?? "new"}`;
+  type Snapshot = { form: typeof form; langs: Record<string, LangDraft> };
+  const [recovered, setRecovered] = useState<{ data: Snapshot; savedAt: number } | null>(null);
+  const savedAt = useAutosave<Snapshot>(draftKey, { form, langs });
+
+  useEffect(() => {
+    const d = loadDraft<Snapshot>(draftKey);
+    if (d?.data?.form) setRecovered(d);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const restoreDraft = () => {
+    if (!recovered) return;
+    setForm((f) => ({ ...f, ...recovered.data.form }));
+    setLangs(recovered.data.langs ?? {});
+    setRecovered(null);
+    toast.success("Draft restored from your last autosave.");
+  };
 
   const set = (k: keyof typeof form, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
   const lang = langs[locale] ?? emptyLang();
@@ -224,13 +246,16 @@ export function ArticleEditor({ article, translations = [] }: Props) {
           translations: translationPayload(),
         },
       }),
+    retry: (count, e) => isAuthError(e) && count < 1,
     onSuccess: (r: { score: number }) => {
+      clearDraft(draftKey);
       toast.success(`Saved — SEO score ${r.score}/100`);
       nav({ to: "/admin/articles" });
     },
     onError: (e: Error) => {
-      setError(e.message);
-      toast.error(e.message);
+      const msg = friendlyErrorMessage(e, "admin");
+      setError(msg);
+      toast.error(msg);
     },
   });
 
@@ -327,8 +352,26 @@ export function ArticleEditor({ article, translations = [] }: Props) {
             <Save className="h-3.5 w-3.5" />
             {save.isPending ? "Saving…" : article ? "Save changes" : "Publish"}
           </button>
+          <span className="text-xs text-muted-foreground">
+            {savedAt ? `Autosaved ${new Date(savedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}` : "Autosave on"}
+          </span>
         </div>
       </header>
+
+      {recovered && (
+        <div className="flex flex-wrap items-center gap-3 border-b border-border bg-amethyst/10 px-4 py-3 text-sm md:px-8">
+          <span>
+            An unsaved draft from{" "}
+            {new Date(recovered.savedAt).toLocaleString("en-US")} was found on this device.
+          </span>
+          <button type="button" onClick={restoreDraft} className="rounded-[14px] bg-navy px-3 py-1.5 text-xs font-bold text-champagne hover:bg-amethyst">
+            Restore draft
+          </button>
+          <button type="button" onClick={() => { clearDraft(draftKey); setRecovered(null); }} className="rounded-[14px] border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted">
+            Discard
+          </button>
+        </div>
+      )}
 
       {error && (
         <p className="border-b border-border bg-ruby/10 px-4 py-3 text-sm font-medium text-ruby md:px-8">{error}</p>

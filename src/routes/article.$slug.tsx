@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { useState } from "react";
 import { Languages, Loader2, Calendar, MapPin, Clock } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
@@ -14,13 +15,12 @@ import { hreflangLinks, geoMeta } from "@/lib/seo";
 import { translateArticle } from "@/lib/translate.functions";
 import { getArticleBySlug, type ArticleDTO, type OfferDTO } from "@/lib/blog.functions";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { OfferRail } from "@/components/OfferRail";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/article/$slug")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loaderDeps: ({ search: { lang } }) => ({ lang }),
   loader: async ({ params, deps }): Promise<{ article: ArticleDTO; related: ArticleDTO[]; offers: OfferDTO[] }> => {
     const res = (await getArticleBySlug({ data: { slug: params.slug, locale: deps.lang ?? "en-US" } })) as any;
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/article/$slug")({
     const a = loaderData?.article;
     if (!a) return { meta: [{ title: "Article" }] };
     const path = `/article/${params.slug}`;
-    const canonical = a.canonical_url || path;
+    const canonical = a.canonical_url || `${SITE_URL}${path}`;
     const img = a.og_image || resolveImage(a.image_url);
     const twImg = a.twitter_image || img;
     const title = a.seo_title || a.title;
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/article/$slug")({
         .join(", ");
     return {
       meta: [
-        { title: `${title} — Atlas & Ember` },
+        { title: `${title} — Bloomwik Hub` },
         { name: "description", content: desc },
         { name: "author", content: a.author },
         { name: "keywords", content: keywords },
@@ -69,9 +69,11 @@ export const Route = createFileRoute("/article/$slug")({
         ...(a.alternates ?? []).map((alt) => ({
           rel: "alternate",
           hrefLang: alt.locale,
-          href: alt.locale === a.locale ? `/article/${alt.slug}` : `/article/${alt.slug}?lang=${alt.locale}`,
+          href: alt.locale === a.locale
+            ? `${SITE_URL}/article/${alt.slug}`
+            : `${SITE_URL}/article/${alt.slug}?lang=${alt.locale}`,
         })),
-        { rel: "alternate", hrefLang: "x-default", href: path },
+        { rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}${path}` },
       ],
       scripts: [{
         type: "application/ld+json",
@@ -85,9 +87,21 @@ export const Route = createFileRoute("/article/$slug")({
           datePublished: a.published_at ?? a.created_at,
           dateModified: a.updated_at,
           author: { "@type": "Person", name: a.author },
-          publisher: { "@type": "Organization", name: "Atlas & Ember" },
+          publisher: { "@type": "Organization", name: "Bloomwik Hub" },
           articleSection: a.category_name,
           mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: a.category_name, item: `${SITE_URL}/category/${a.category_slug}` },
+            { "@type": "ListItem", position: 3, name: a.title, item: canonical },
+          ],
         }),
       },
       ...((a.faq ?? []).length > 0
@@ -208,7 +222,7 @@ function ArticlePage() {
                 <p className="mt-2 font-serif text-2xl">{article.author}</p>
               )}
               <p className="mt-1 text-sm text-muted-foreground">
-                {article.author_bio ?? `Writes about ${article.category_name.toLowerCase()} for Bloomwik.`}
+                {article.author_bio ?? `Writes about ${article.category_name.toLowerCase()} for Bloomwik Hub.`}
               </p>
               {article.author_slug && (
                 <Link

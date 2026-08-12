@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -10,13 +11,13 @@ import { hreflangLinks } from "@/lib/seo";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Atlas & Ember" },
-      { name: "description", content: "Pitches, partnerships, press — get in touch with Atlas & Ember." },
-      { property: "og:title", content: "Contact Atlas & Ember" },
+      { title: "Contact — Bloomwik Hub" },
+      { name: "description", content: "Pitches, partnerships, press — get in touch with Bloomwik Hub." },
+      { property: "og:title", content: "Contact Bloomwik Hub" },
       { property: "og:description", content: "Pitches, partnerships, press." },
       { property: "og:url", content: "/contact" },
     ],
-    links: [{ rel: "canonical", href: "/contact" }, ...hreflangLinks("/contact")],
+    links: [{ rel: "canonical", href: `${SITE_URL}/contact` }, ...hreflangLinks("/contact")],
   }),
   component: ContactPage,
 });

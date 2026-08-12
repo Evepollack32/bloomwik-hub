@@ -33,7 +33,7 @@ export interface SettingsDTO {
 }
 
 export const DEFAULT_SETTINGS: SettingsDTO = {
-  site_name: "Atlas & Ember",
+  site_name: "Bloomwik Hub",
   tagline: "The world, in stories",
   description: "",
   default_og_image: "",

@@ -72,7 +72,7 @@ export function ArticleCard({
           ) : (
             <span className="font-medium text-foreground">{article.author}</span>
           )}{" "}
-          · {new Date(date).toLocaleDateString()}
+          · {new Date(date).toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "short", day: "numeric" })}
         </p>
       </div>
     </article>

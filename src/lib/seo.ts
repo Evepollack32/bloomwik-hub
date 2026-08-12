@@ -1,4 +1,5 @@
 import { LOCALES } from "./i18n";
+import { SITE_URL } from "./sitemap";
 
 /**
  * Build hreflang link tags for a given route path.
@@ -8,9 +9,9 @@ export function hreflangLinks(path: string) {
   const links: { rel: string; hrefLang: string; href: string }[] = LOCALES.map((l) => ({
     rel: "alternate",
     hrefLang: l.code as string,
-    href: `${path}?lang=${l.code}`,
+    href: `${SITE_URL}${path}?lang=${l.code}`,
   }));
-  links.push({ rel: "alternate", hrefLang: "x-default", href: path });
+  links.push({ rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}${path}` });
   return links;
 }
 
@@ -21,6 +22,5 @@ export function geoMeta(geo?: { country: string; region?: string; city?: string 
   return [
     { name: "geo.region", content: geo.region ? `${geo.country}-${geo.region}` : geo.country },
     { name: "geo.placename", content: placename },
-    { name: "ICBM", content: "" }, // intentionally blank — fill at row level if you have lat/lon
   ];
 }

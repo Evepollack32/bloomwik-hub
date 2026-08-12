@@ -1,17 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { useLocale } from "@/lib/locale-context";
 import { hreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Atlas & Ember" },
-      { name: "description", content: "Atlas & Ember is an editorial blog publishing across travel, fashion, food, technology and culture in 15 languages." },
-      { property: "og:title", content: "About Atlas & Ember" },
+      { title: "About — Bloomwik Hub" },
+      { name: "description", content: "Bloomwik Hub is an editorial blog publishing across travel, fashion, food, technology and culture in 15 languages." },
+      { property: "og:title", content: "About Bloomwik Hub" },
       { property: "og:description", content: "An editorial blog publishing in 15 languages." },
       { property: "og:url", content: "/about" },
     ],
-    links: [{ rel: "canonical", href: "/about" }, ...hreflangLinks("/about")],
+    links: [{ rel: "canonical", href: `${SITE_URL}/about` }, ...hreflangLinks("/about")],
   }),
   component: AboutPage,
 });
@@ -24,7 +25,7 @@ function AboutPage() {
       <h1 className="mt-3 max-w-3xl font-serif text-5xl md:text-6xl">A small magazine with a wide horizon.</h1>
       <div className="mt-10 grid gap-12 md:grid-cols-2">
         <div className="prose-blog max-w-none">
-          <p>Atlas & Ember began as a Saturday-morning newsletter between three friends — a chef, a designer and a journalist — who could never agree on what to read. Three years later it is a weekly magazine published in fifteen languages, written by a small staff and a deep bench of contributors on five continents.</p>
+          <p>Bloomwik Hub began as a Saturday-morning newsletter between three friends — a chef, a designer and a journalist — who could never agree on what to read. Three years later it is a weekly magazine published in fifteen languages, written by a small staff and a deep bench of contributors on five continents.</p>
           <p>We cover what we love: travel that takes its time, fashion that says something, food that comes from somewhere, technology built by people we'd want to have coffee with, and culture that's worth arguing about over dinner.</p>
           <p>Every piece is written first in English, then translated by a model we trust and edited by a human we trust more. The translations are imperfect on purpose — we'd rather you read a story in your own language with the seams showing than not read it at all.</p>
         </div>

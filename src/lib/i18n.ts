@@ -43,14 +43,14 @@ export const DEFAULT_LOCALE: LocaleCode = "en-US";
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  brand: "Atlas & Ember",
+  brand: "Bloomwik Hub",
   tagline: "Stories from every corner of the world",
   nav_home: "Home",
   nav_about: "About",
   nav_contact: "Contact",
   nav_categories: "Categories",
   all_categories: "All categories",
-  all_categories_lead: "Every desk at Atlas & Ember — pick a beat and start reading.",
+  all_categories_lead: "Every desk at Bloomwik Hub — pick a beat and start reading.",
   sponsored: "Sponsored",
   offers_title: "Offers we like",
 
@@ -72,7 +72,7 @@ const en: Dict = {
   newsletter_email: "Your email",
   newsletter_join: "Subscribe",
   ad_label: "Advertisement",
-  about_title: "About Atlas & Ember",
+  about_title: "About Bloomwik Hub",
   contact_title: "Get in touch",
   contact_lead: "Pitches, partnerships, press — we read everything.",
   send: "Send",
@@ -121,4 +121,9 @@ export function t(locale: LocaleCode, key: keyof typeof en): string {
 
 export function htmlLangFor(locale: LocaleCode): string {
   return locale;
+}
+
+/** Shared `validateSearch` for routes that accept an optional `?lang=` param. */
+export function validateLangSearch(s: Record<string, unknown>): { lang?: LocaleCode } {
+  return isLocaleCode(s.lang) ? { lang: s.lang as LocaleCode } : {};
 }

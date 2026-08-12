@@ -1,18 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { SITE_URL } from "@/lib/sitemap";
 import { ArrowRight } from "lucide-react";
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
+import { validateLangSearch } from "@/lib/i18n";
 import { useLocale } from "@/lib/locale-context";
 import { hreflangLinks } from "@/lib/seo";
 import { listCategories, type CategoryDTO } from "@/lib/blog.functions";
 
 export const Route = createFileRoute("/categories")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    lang: isLocaleCode(s.lang) ? (s.lang as LocaleCode) : undefined,
-  }),
+  validateSearch: validateLangSearch,
   loader: async (): Promise<CategoryDTO[]> => (await listCategories()) as CategoryDTO[],
   head: () => {
-    const title = "All categories — Atlas & Ember";
-    const desc = "Browse every Atlas & Ember desk: travel, fashion, food, technology and culture.";
+    const title = "All categories — Bloomwik Hub";
+    const desc = "Browse every Bloomwik Hub desk: travel, fashion, food, technology and culture.";
     return {
       meta: [
         { title },
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/categories")({
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: desc },
       ],
-      links: [{ rel: "canonical", href: "/categories" }, ...hreflangLinks("/categories")],
+      links: [{ rel: "canonical", href: `${SITE_URL}/categories` }, ...hreflangLinks("/categories")],
     };
   },
   errorComponent: ({ error }) => (

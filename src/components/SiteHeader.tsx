@@ -14,8 +14,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container-x flex h-16 items-center justify-between gap-4">
         <Link to="/" className="flex items-baseline gap-2" onClick={() => setOpen(false)}>
-          <span className="font-serif text-2xl leading-none text-navy">Atlas</span>
-          <span className="text-xs uppercase tracking-[0.3em] text-ruby">& Ember</span>
+          <span className="font-serif text-2xl leading-none text-navy">Bloomwik</span>
+          <span className="text-xs uppercase tracking-[0.3em] text-ruby">Hub</span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
