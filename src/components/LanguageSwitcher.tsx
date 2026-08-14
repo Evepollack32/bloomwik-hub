@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LOCALES } from "@/lib/i18n";
 import { useLocale } from "@/lib/locale-context";
+import { Flag } from "./Flag";
 
 export function LanguageSwitcher() {
   const { locale, setLocale, t } = useLocale();
@@ -17,7 +18,7 @@ export function LanguageSwitcher() {
         title={`${active.native} — ${active.label}`}
         className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground transition hover:border-amethyst hover:text-amethyst"
       >
-        <span className="text-lg leading-none">{active.flag}</span>
+        <Flag region={active.region ?? active.code.slice(-2)} />
         <span className="hidden sm:inline">{active.native}</span>
         <ChevronDown className="h-3.5 w-3.5 opacity-60" />
       </DropdownMenuTrigger>
@@ -34,7 +35,7 @@ export function LanguageSwitcher() {
             className="flex items-center justify-between rounded-[14px] py-2"
           >
             <span className="flex items-center gap-2">
-              <span className="text-lg leading-none">{l.flag}</span>
+              <Flag region={l.region ?? l.code.slice(-2)} />
               <span className="font-medium">{l.native}</span>
               <span className="text-xs text-muted-foreground">{l.label}</span>
             </span>

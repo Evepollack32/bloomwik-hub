@@ -27,9 +27,8 @@ export function AdSlot({ variant = "leaderboard", className = "", wrapperClassNa
     staleTime: 60_000,
   });
 
-  // No ad configured for this slot — render nothing at all.
-  if (!ad) return null;
-
+  // No ad (or no creative) configured for this slot — render nothing at all.
+  if (!ad || (!ad.html_snippet && !ad.image_url)) return null;
 
   const inner = ad.html_snippet ? (
     <div
