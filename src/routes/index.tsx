@@ -92,15 +92,15 @@ function HomePage() {
               <Link
                 to="/article/$slug"
                 params={{ slug: featured.slug }}
-                className="group relative block overflow-hidden rounded-[20px] bg-card text-foreground shadow-[var(--shadow-glow)] lg:col-span-8"
+                className="group relative block h-full overflow-hidden rounded-[20px] bg-card text-foreground shadow-[var(--shadow-glow)] lg:col-span-8"
               >
-                <div className="relative">
+                <div className="relative h-full">
                   <img
                     src={resolveImage(featured.image_url)}
                     alt={featured.image_alt ?? featured.title}
                     width={1600}
                     height={1024}
-                    className="aspect-[16/10] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                    className="aspect-[16/10] h-full w-full object-cover transition duration-700 group-hover:scale-[1.03] lg:aspect-auto lg:absolute lg:inset-0"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 text-champagne md:p-9">
