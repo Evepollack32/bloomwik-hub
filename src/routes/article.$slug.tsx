@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/sitemap";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Languages, Loader2, Calendar, MapPin, Clock } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
@@ -17,6 +17,8 @@ import { getArticleBySlug, type ArticleDTO, type OfferDTO } from "@/lib/blog.fun
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
 import { validateLangSearch } from "@/lib/i18n";
 import { OfferRail } from "@/components/OfferRail";
+import { TableOfContents } from "@/components/TableOfContents";
+import { extractToc } from "@/lib/toc";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/article/$slug")({
@@ -144,6 +146,7 @@ function ArticlePage() {
   const isEnglish = locale.startsWith("en");
   const date = article.published_at ?? article.created_at;
   const img = resolveImage(article.image_url);
+  const toc = useMemo(() => extractToc(article.content_html ?? ""), [article.content_html]);
 
   return (
     <>
@@ -186,6 +189,10 @@ function ArticlePage() {
                 </button>
               </div>
             </div>
+          )}
+
+          {!translated && (
+            <TableOfContents items={toc} className="mb-8 rounded-[20px] border border-border bg-muted/30 p-6 lg:hidden" />
           )}
 
           {translated ? (
@@ -238,6 +245,11 @@ function ArticlePage() {
         </div>
 
         <aside className="space-y-8 lg:col-span-4">
+          {!translated && (
+            <div className="hidden lg:block lg:sticky lg:top-24">
+              <TableOfContents items={toc} />
+            </div>
+          )}
           <AdSlot variant="square" />
           {related.length > 0 && (
             <div className="rounded-[20px] border border-border p-6">

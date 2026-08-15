@@ -175,6 +175,9 @@
   .prose-blog h2 { font-size: 1.875rem; margin: 2rem 0 0.75rem; }
   .prose-blog h3 { font-size: 1.5rem; margin: 1.75rem 0 0.6rem; }
   .prose-blog h4 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
+  .prose-blog h2,
+  .prose-blog h3,
+  .prose-blog h4 { scroll-margin-top: 6rem; }
   .prose-blog a { color: var(--amethyst); text-decoration: underline; text-underline-offset: 3px; }
   .prose-blog strong { font-weight: 700; }
   .prose-blog em { font-style: italic; }
