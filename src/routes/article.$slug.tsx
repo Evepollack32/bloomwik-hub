@@ -17,6 +17,8 @@ import { getArticleBySlug, type ArticleDTO, type OfferDTO } from "@/lib/blog.fun
 import { isLocaleCode, type LocaleCode } from "@/lib/i18n";
 import { validateLangSearch } from "@/lib/i18n";
 import { OfferRail } from "@/components/OfferRail";
+import { TableOfContents } from "@/components/TableOfContents";
+import { extractToc } from "@/lib/toc";
 import { resolveImage } from "@/lib/image-map";
 
 export const Route = createFileRoute("/article/$slug")({
