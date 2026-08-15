@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/sitemap";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Languages, Loader2, Calendar, MapPin, Clock } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
@@ -146,6 +146,7 @@ function ArticlePage() {
   const isEnglish = locale.startsWith("en");
   const date = article.published_at ?? article.created_at;
   const img = resolveImage(article.image_url);
+  const toc = useMemo(() => extractToc(article.content_html ?? ""), [article.content_html]);
 
   return (
     <>
