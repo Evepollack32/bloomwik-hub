@@ -11,9 +11,10 @@ const ALLOWED_IFRAME_HOSTS = [
 ];
 
 function sanitize(html: string): string {
-  const clean = DOMPurify.sanitize(html, {
+  const clean = DOMPurify.sanitize(withHeadingIds(html), {
     ADD_TAGS: ["iframe", "figure", "figcaption", "colgroup", "col"],
     ADD_ATTR: [
+      "id",
       "allow",
       "allowfullscreen",
       "frameborder",
