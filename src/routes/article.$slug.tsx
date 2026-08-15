@@ -191,9 +191,7 @@ function ArticlePage() {
             </div>
           )}
 
-          {!translated && (
-            <TableOfContents items={toc} className="mb-8 rounded-[20px] border border-border bg-muted/30 p-6 lg:hidden" />
-          )}
+          {!translated && <TableOfContents items={toc} className="mb-8" />}
 
           {translated ? (
             <div className="prose-blog max-w-none text-foreground">
@@ -245,11 +243,6 @@ function ArticlePage() {
         </div>
 
         <aside className="space-y-8 lg:col-span-4">
-          {!translated && (
-            <div className="hidden lg:block lg:sticky lg:top-24">
-              <TableOfContents items={toc} />
-            </div>
-          )}
           <AdSlot variant="square" />
           {related.length > 0 && (
             <div className="rounded-[20px] border border-border p-6">
