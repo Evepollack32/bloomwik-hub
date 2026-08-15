@@ -191,6 +191,10 @@ function ArticlePage() {
             </div>
           )}
 
+          {!translated && (
+            <TableOfContents items={toc} className="mb-8 rounded-[20px] border border-border bg-muted/30 p-6 lg:hidden" />
+          )}
+
           {translated ? (
             <div className="prose-blog max-w-none text-foreground">
               {body.map((p, i) => (
