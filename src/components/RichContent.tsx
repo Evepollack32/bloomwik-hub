@@ -1,5 +1,6 @@
 import DOMPurify from "isomorphic-dompurify";
 import { useMemo } from "react";
+import { withHeadingIds } from "@/lib/toc";
 
 const ALLOWED_IFRAME_HOSTS = [
   "www.youtube.com",
