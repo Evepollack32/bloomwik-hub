@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { List } from "lucide-react";
+import { ChevronDown, List } from "lucide-react";
 import type { TocItem } from "@/lib/toc";
 
-/** Auto-generated table of contents for an article's headings. */
+/** Auto-generated, collapsible table of contents for an article's headings. */
 export function TableOfContents({
   items,
-  title = "Table of contents",
+  title = "Table of Contents",
   className,
+  defaultOpen = true,
 }: {
   items: TocItem[];
   title?: string;
   className?: string;
+  defaultOpen?: boolean;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,27 +40,41 @@ export function TableOfContents({
   return (
     <nav
       aria-label={title}
-      className={className ?? "rounded-[20px] border border-border bg-muted/30 p-6"}
+      className={`overflow-hidden rounded-[20px] border border-border bg-muted/30 ${className ?? ""}`}
     >
-      <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-        <List className="h-4 w-4" /> {title}
-      </p>
-      <ol className="mt-4 space-y-2 text-sm">
-        {items.map((item) => (
-          <li key={item.id} style={{ paddingLeft: (item.level - 2) * 14 }}>
-            <a
-              href={`#${item.id}`}
-              className={
-                active === item.id
-                  ? "font-semibold text-amethyst"
-                  : "text-muted-foreground transition hover:text-amethyst"
-              }
-            >
-              {item.text}
-            </a>
-          </li>
-        ))}
-      </ol>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
+      >
+        <span className="flex items-center gap-2 font-serif text-lg text-foreground">
+          <List className="h-4 w-4 text-amethyst" />
+          {title}
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 flex-none text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && (
+        <ol className="space-y-2 border-t border-border px-5 py-4 text-[0.95rem]">
+          {items.map((item, i) => (
+            <li key={item.id} style={{ paddingLeft: (item.level - 2) * 16 }}>
+              <a
+                href={`#${item.id}`}
+                className={
+                  active === item.id
+                    ? "font-semibold text-amethyst"
+                    : "text-muted-foreground transition hover:text-amethyst"
+                }
+              >
+                <span className="mr-2 tabular-nums text-xs text-muted-foreground/70">{i + 1}.</span>
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
     </nav>
   );
 }
